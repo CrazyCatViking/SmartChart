@@ -12,7 +12,7 @@
 import { inject } from 'vue';
 import CanvasElement from './CanvasElement.vue';
 import { chartInjectionKey } from './chart';
-import { createRect, createImage, createEllipse } from './element';
+import { createImage, createEllipse } from './elements';
 import { ElementPosition, ElementSize } from './types';
 
 const { elements, addElement, removeElement } = inject(chartInjectionKey)!;

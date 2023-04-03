@@ -11,7 +11,7 @@
 
 <script setup lang="ts">
 import { PropType } from 'vue';
-import { Element, Ellipse } from '../element';
+import { Element, Ellipse } from '../elements/';
 
 const props = defineProps({
   element: {

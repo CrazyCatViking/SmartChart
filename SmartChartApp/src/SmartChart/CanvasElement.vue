@@ -16,7 +16,7 @@ import Container from './Container/Container.vue';
 import Ellipse from './primitives/CanvasEllipse.vue';
 import Rectangle from './primitives/CanvasRectangle.vue';
 import Image from './primitives/CanvasImage.vue';
-import { Element } from './element';
+import { Element } from './elements/element';
 
 const props = defineProps({
   element: {

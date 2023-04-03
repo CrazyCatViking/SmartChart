@@ -9,11 +9,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "file-saver": "^2.0.5",
     "uuid": "^9.0.0",
     "vue": "^3.2.47",
     "vue-global-events": "^2.1.1"
   },
   "devDependencies": {
+    "@types/file-saver": "^2.0.5",
     "@types/uuid": "^9.0.1",
     "@vitejs/plugin-vue": "^4.1.0",
     "sass": "^1.60.0",

@@ -9,7 +9,7 @@
 
 <script setup lang="ts">
 import { PropType } from 'vue';
-import { Element, Image } from '../element';
+import { Element, Image } from '../elements';
 
 const props = defineProps({
   element: {

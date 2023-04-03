@@ -2,7 +2,7 @@
   <div
     class="container" 
     :style="style"
-    tabindex="0"
+    :tabindex="elementPosition.z"
     @focus="() => isSelected = true"
     @blur="() => isSelected = false"
   >

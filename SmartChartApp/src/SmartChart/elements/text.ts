@@ -32,20 +32,22 @@ export const createText = (position: ElementPosition, size: ElementSize): TextEl
 
     const lines = _text.value.split(/\r?\n|\r|\n/g);
 
-    lines.forEach((line, index) => {
-      const ly = (-height / 2) + index * _lineHeight;
+    lines
+      .filter((_, index) => (index + 1)*_lineHeight < height)
+      .forEach((line, index) => {
+        const ly = (-height / 2) + index * _lineHeight;
 
-      ctx.font = `${_fontSize}px ${_font}`;
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'top';
-      ctx.fillStyle = 'black';
+        ctx.font = `${_fontSize}px ${_font}`;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'top';
+        ctx.fillStyle = 'black';
 
-      ctx.translate(cx, cy);
-      ctx.rotate(rotation);
-      ctx.fillText(line, 0, ly);
-      ctx.rotate(-rotation);
-      ctx.translate(-cx, -cy);
-    });
+        ctx.translate(cx, cy);
+        ctx.rotate(rotation);
+        ctx.fillText(line, 0, ly);
+        ctx.rotate(-rotation);
+        ctx.translate(-cx, -cy);
+      });
 
     console.log(_text.value);
   };

@@ -33,7 +33,7 @@ export const createText = (position: ElementPosition, size: ElementSize): TextEl
     const lines = _text.value.split(/\r?\n|\r|\n/g);
 
     lines
-      .filter((_, index) => (index + 1)*_lineHeight < height)
+      .filter((_, index) => (index + 1)*_lineHeight <= height)
       .forEach((line, index) => {
         const ly = y + index * _lineHeight;
 

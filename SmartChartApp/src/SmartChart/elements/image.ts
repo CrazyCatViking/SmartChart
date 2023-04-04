@@ -27,9 +27,10 @@ export const createImage = (position: ElementPosition, size: ElementSize, url: s
     
         ctx.translate(cx, cy);
         ctx.rotate(rotation);
-        ctx.drawImage(image, -width / 2, -height / 2, width, height);
-        ctx.rotate(-rotation);
         ctx.translate(-cx, -cy);
+
+        ctx.drawImage(image, x, y, width, height);
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
 
         resolve();
       };

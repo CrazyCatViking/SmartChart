@@ -35,7 +35,7 @@ export const createText = (position: ElementPosition, size: ElementSize): TextEl
     lines
       .filter((_, index) => (index + 1)*_lineHeight < height)
       .forEach((line, index) => {
-        const ly = (-height / 2) + index * _lineHeight;
+        const ly = y + index * _lineHeight;
 
         ctx.font = `${_fontSize}px ${_font}`;
         ctx.textAlign = 'center';
@@ -44,9 +44,11 @@ export const createText = (position: ElementPosition, size: ElementSize): TextEl
 
         ctx.translate(cx, cy);
         ctx.rotate(rotation);
-        ctx.fillText(line, 0, ly);
-        ctx.rotate(-rotation);
         ctx.translate(-cx, -cy);
+
+        ctx.fillText(line, cx, ly);
+
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
       });
 
     console.log(_text.value);

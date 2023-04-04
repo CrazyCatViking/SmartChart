@@ -6,7 +6,7 @@
     @focus="() => isSelected = true"
     @blur="() => isSelected = false"
   >
-    <ContainerTransform v-show="isSelected"/>
+    <ContainerTransform v-show="isSelected" />
 
     <div
       class="container-content"

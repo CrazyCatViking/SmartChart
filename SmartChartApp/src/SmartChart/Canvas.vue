@@ -12,7 +12,7 @@
 import { inject } from 'vue';
 import CanvasElement from './CanvasElement.vue';
 import { chartInjectionKey } from './chart';
-import { createImage, createEllipse } from './elements';
+import { createImage, createEllipse, createText } from './elements';
 import { ElementPosition, ElementSize } from './types';
 
 const { elements, addElement, removeElement } = inject(chartInjectionKey)!;
@@ -34,9 +34,15 @@ const elementSizeC: ElementSize = { width: 50, height: 50 };
 
 const elementC = createEllipse(elementPositionC, elementSizeC);
 
+const elementPositionD: ElementPosition = { x: 600, y: 600, z: 0, rotation: 0 };
+const elementSizeD: ElementSize = { width: 50, height: 50 };
+
+const elementD = createText(elementPositionD, elementSizeD);
+
 addElement(elementA);
 addElement(elementB);
 addElement(elementC);
+addElement(elementD);
 </script>
 
 <style lang="scss">

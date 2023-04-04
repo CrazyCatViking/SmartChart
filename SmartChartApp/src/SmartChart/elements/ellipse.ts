@@ -3,10 +3,13 @@ import { Element, createElement } from "./element";
 
 export interface Ellipse extends Element {
   color: string;
+  strokeWidth: number;
 }
 
 export const createEllipse = (position: ElementPosition, size: ElementSize): Ellipse => {
   const element = createElement(position, size, 'Ellipse');
+
+  const _strokeWidth = 3;
 
   const render = (ctx: CanvasRenderingContext2D) => {
     const { x, y, rotation } = element.position.value;
@@ -17,6 +20,7 @@ export const createEllipse = (position: ElementPosition, size: ElementSize): Ell
 
     ctx.beginPath();
     ctx.ellipse(cx, cy, width / 2, height / 2, rotation, 0, 2*Math.PI);
+    ctx.lineWidth = _strokeWidth;
     ctx.stroke();
   };
 
@@ -24,6 +28,7 @@ export const createEllipse = (position: ElementPosition, size: ElementSize): Ell
     ...element,
 
     color: 'black',
+    strokeWidth: _strokeWidth,
     render,
   };
 };

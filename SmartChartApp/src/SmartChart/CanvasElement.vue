@@ -16,6 +16,7 @@ import Container from './Container/Container.vue';
 import Ellipse from './primitives/CanvasEllipse.vue';
 import Rectangle from './primitives/CanvasRectangle.vue';
 import Image from './primitives/CanvasImage.vue';
+import TextElement from './primitives/CanvasText.vue';
 import { Element } from './elements/element';
 
 const props = defineProps({
@@ -35,6 +36,8 @@ const component = computed(() => {
       return Ellipse;
     case 'Image':
       return Image;
+    case 'Text':
+      return TextElement;
   }
 });
 </script>

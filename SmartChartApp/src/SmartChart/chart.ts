@@ -76,7 +76,6 @@ const createChart = (canvasState: CanvasState, hotKeyState: HotKeyState): Chart 
   const getIsSelected = (id: string) => computed(() => _selectedElements.value.includes(id));
 
   const deleteSelected = () => {
-    console.log('test');
     _elements.value = _elements.value.filter((element) => !_selectedElements.value.includes(element.id));
     _selectedElements.value = [];
   };

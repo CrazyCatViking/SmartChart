@@ -19,7 +19,7 @@
   <GlobalEvents
     @keydown.control.stop="() => ctrlPressed = true"
     @keyup.control.stop="() => ctrlPressed = false"
-    @keydown.delete.stop.prevent="deleteSelected"
+    @keydown.delete.stop.prevent="onDelete"
   />
 </template>
 
@@ -34,6 +34,12 @@ import { canvasStateInjectionKey } from './canvasState';
 const { elements, resetSelection, deleteSelected } = inject(chartInjectionKey)!;
 const { ctrlPressed } = inject(hotKeyStateInjectionKey)!;
 const { isAddingElement } = inject(canvasStateInjectionKey)!;
+
+const onDelete = (e: KeyboardEvent) => {
+  if (e.key === 'Delete') {
+    deleteSelected();
+  }
+};
 </script>
 
 <style lang="scss">

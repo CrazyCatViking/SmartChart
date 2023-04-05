@@ -40,11 +40,14 @@ const internalElement= ref(props.element as TextElement);
 const clickPrimed = ref(false);
 
 const textStyle = computed<StyleValue>(() => {
-  const { font, fontSize, fontWeight, lineHeight } = internalElement.value;
+  const {
+    font,
+    fontSize,
+    fontWeight,
+    lineHeight,
+  } = internalElement.value;
 
   return {
-    width: internalElement.value.size.width,
-    height: internalElement.value.size.height,
     'font-family': font,
     'font-size': `${fontSize}px`,
     'font-weight': fontWeight,

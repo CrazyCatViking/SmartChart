@@ -97,7 +97,7 @@ const style = computed(() => ({
   top: 0;
   left: 0;
 
-  
+  cursor: pointer;
 
   &:focus {
     outline: 1px dotted blue;

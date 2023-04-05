@@ -12,10 +12,10 @@ export interface TextElement extends Element {
   lineHeight: number;
 }
 
-export const createText = (position: ElementPosition, size: ElementSize): TextElement => {
+export const createText = (position: ElementPosition, size: ElementSize, text: string): TextElement => {
   const element = createElement(position, size, 'Text');
 
-  const _text = ref("Test");
+  const _text = ref(text);
   const _font = 'Times New Roman';
   const _fontSize = 16;
   const _fontWeight = 200;
@@ -50,8 +50,6 @@ export const createText = (position: ElementPosition, size: ElementSize): TextEl
 
         ctx.setTransform(1, 0, 0, 1, 0, 0);
       });
-
-    console.log(_text.value);
   };
 
   return {

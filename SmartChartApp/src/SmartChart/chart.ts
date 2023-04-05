@@ -4,6 +4,7 @@ import { Element } from "./elements/element";
 
 interface Chart {
   elements: Readonly<Ref<Element[]>>;
+  selectedElements: Readonly<Ref<string[]>>;
 
   addElement: (element: Element) => void;
   removeElement: (id: string) => void; 
@@ -22,6 +23,7 @@ export const chartInjectionKey: InjectionKey<Chart> = Symbol('chart-injection-ke
 
 const createChart = (): Chart => {
   const _elements: Ref<Element[]> = ref([]);
+  const _selectedElements: Ref<string[]> = ref([]);
 
   const addElement = (element: Element) => {
     _elements.value.push(element);
@@ -53,6 +55,7 @@ const createChart = (): Chart => {
 
   return {
     get elements() { return _elements; },
+    get selectedElements() { return _selectedElements; },
 
     addElement,
     removeElement,

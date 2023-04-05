@@ -2,10 +2,32 @@
   <div class="toolbar">
     <button
       class="toolbar-button"
-      @click="() => isCreatingElement = true"
+      @click="() => isCreatingEllipse = true"
     >
-      <span>{{ '+' }}</span>
+      <span>{{ '+ Ellipse' }}</span>
     </button>
+
+    <button
+      class="toolbar-button"
+      @click="() => isCreatingRectangle = true"
+    >
+      <span>{{ '+ Rectangle' }}</span>
+    </button>
+
+    <button
+      class="toolbar-button"
+      @click="() => isCreatingText = true"
+    >
+      <span>{{ '+ Text' }}</span>
+    </button>
+
+    <button
+      class="toolbar-button"
+      @click="() => isCreatingImage = true"
+    >
+      <span>{{ '+ Image' }}</span>
+    </button>
+
     <button
       class="toolbar-button"
       @click="convertToImage"
@@ -15,7 +37,7 @@
   </div>
 
   <GlobalEvents
-    v-if="isCreatingElement"
+    v-if="isCreatingEllipse || isCreatingRectangle || isCreatingText || isCreatingImage"
     @mousedown="onMouseDown"
     @mousemove="onMouseMove"
     @mouseup="onMouseUp"
@@ -26,12 +48,18 @@
 import { inject, ref } from 'vue';
 import { GlobalEvents } from 'vue-global-events';
 import { chartInjectionKey } from '../chart';
-import { Element, createEllipse } from '../elements';
+import { Element, createEllipse, createImage, createRect, createText } from '../elements';
 import { ElementPosition, ElementSize } from '../types';
+
+const imageUrl = "https://i.guim.co.uk/img/media/26392d05302e02f7bf4eb143bb84c8097d09144b/446_167_3683_2210/master/3683.jpg?width=620&quality=85&dpr=1&s=none";
 
 const { addElement, convertToImage } = inject(chartInjectionKey)!;
 
-const isCreatingElement = ref(false);
+const isCreatingEllipse = ref(false);
+const isCreatingRectangle = ref(false);
+const isCreatingText = ref(false);
+const isCreatingImage = ref(false);
+
 const initialPosition = ref({ x: 0, y: 0 });
 let element: Element | undefined;
 
@@ -44,10 +72,27 @@ const onMouseDown = (e: MouseEvent) => {
   const position: ElementPosition = { x: clientX, y: clientY, z: 0, rotation: 0 };
   const size: ElementSize = { height: 0, width: 0 };
 
-  const ellipse = createEllipse(position, size);
+  if (isCreatingEllipse.value) {
+    const ellipse = createEllipse(position, size);
 
-  element = ellipse;
-  addElement(element);
+    element = ellipse;
+    addElement(element);
+  } else if (isCreatingRectangle.value) {
+    const rectangle = createRect(position, size);
+
+    element = rectangle;
+    addElement(element);
+  } else if (isCreatingText.value) {
+    const text = createText(position, size, 'ipsum lorum');
+
+    element = text;
+    addElement(element);
+  } else if (isCreatingImage.value) {
+    const image = createImage(position, size, imageUrl);
+
+    element = image;
+    addElement(element);
+  }
 };
 
 const onMouseMove = (e: MouseEvent) => {
@@ -69,7 +114,10 @@ const onMouseMove = (e: MouseEvent) => {
 };
 
 const onMouseUp = (e: MouseEvent) => {
-  isCreatingElement.value = false;
+  isCreatingEllipse.value = false;
+  isCreatingRectangle.value = false;
+  isCreatingText.value = false;
+  isCreatingImage.value = false;
   element = undefined;
 };
 </script>
@@ -77,6 +125,7 @@ const onMouseUp = (e: MouseEvent) => {
 <style lang="scss">
 .toolbar {
   position: absolute;
+  gap: 1rem;
   bottom: 10px;
   left: 50%;
 
@@ -89,7 +138,7 @@ const onMouseUp = (e: MouseEvent) => {
   transform: translate(-50%);
 
   height: 2rem;
-  width: 20rem;
+  min-width: 20rem;
 
   background-color: orange;
 

@@ -4,16 +4,16 @@
     :style="style"
   >
     <ellipse
-      :cx="size.width / 2"
-      :cy="size.height / 2"
-      :rx="size.width / 2 - 3"
-      :ry="size.height / 2 - 3"
+      :cx="cx"
+      :cy="cy"
+      :rx="rx >= 0 ? rx : 0"
+      :ry="ry >= 0 ? ry : 0"
     />
   </svg>
 </template>
 
 <script setup lang="ts">
-import { PropType, computed } from 'vue';
+import { PropType, Ref, computed, ref } from 'vue';
 import { Element, Ellipse } from '../elements/';
 
 const props = defineProps({
@@ -23,10 +23,15 @@ const props = defineProps({
   },
 });
 
-const { size, strokeWidth } = props.element as Ellipse;
+const internalElement = ref(props.element as Ellipse);
+
+const cx = computed(() => internalElement.value.size.width / 2);
+const cy = computed(() => internalElement.value.size.height / 2);
+const rx = computed(() => internalElement.value.size.width / 2 - 3);
+const ry = computed(() => internalElement.value.size.height / 2 - 3);
 
 const style = computed(() => ({
-  'stroke-width': strokeWidth,
+  'stroke-width': internalElement.value.strokeWidth,
 }));
 </script>
 

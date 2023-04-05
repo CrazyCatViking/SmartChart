@@ -2,9 +2,9 @@
   <div
     class="container" 
     :style="style"
-    :tabindex="elementPosition.z"
-    @focus="() => isSelected = true"
-    @blur="() => isSelected = false"
+    :tabindex="internalElement.position.z"
+    @mousedown.stop="onSelectElement"
+    @click.stop.prevent
   >
     <ContainerTransform v-show="isSelected" />
 
@@ -25,24 +25,24 @@
 </template>
 
 <script setup lang="ts">
-import { PropType, computed, ref } from 'vue';
+import { PropType, computed, inject, ref } from 'vue';
 import { GlobalEvents } from 'vue-global-events';
-import { ElementPosition, ElementSize } from '../types';
 import { useRect } from './useRect';
 import ContainerTransform from './ContainerTransform.vue';
+import { chartInjectionKey } from '../chart';
+import { Element } from '../elements';
 
 const props = defineProps({
-  elementPosition: {
-    type: Object as PropType<ElementPosition>,
-    required: true,
-  },
-  elementSize: {
-    type: Object as PropType<ElementSize>,
+  element: {
+    type: Object as PropType<Element>,
     required: true,
   },
 });
 
-const isSelected = ref(false);
+const internalElement = ref(props.element);
+
+const { selectElement, getIsSelected } = inject(chartInjectionKey)!;
+const isSelected = getIsSelected(internalElement.value.id);
 
 const isDragging = ref(false);
 
@@ -52,7 +52,12 @@ const {
   rectPosition,
   rectSize,
   moveRect,
-} = useRect(props.elementPosition, props.elementSize);
+} = useRect(internalElement.value.position, internalElement.value.size);
+
+const onSelectElement = () => {
+  const id = internalElement.value.id;
+  selectElement(id);
+};
 
 const onDragStart = (e: MouseEvent) => {
   isDragging.value = true;
@@ -98,10 +103,6 @@ const style = computed(() => ({
   left: 0;
 
   cursor: pointer;
-
-  &:focus {
-    outline: 1px dotted blue;
-  }
 }
 
 .container-content {

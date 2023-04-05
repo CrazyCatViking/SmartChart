@@ -1,8 +1,5 @@
 <template>
-  <Container
-    :element-position="position"
-    :element-size="size"
-  >
+  <Container :element="element">
     <component
       :is="component"
       :element="element"
@@ -25,8 +22,6 @@ const props = defineProps({
     required: true,
   },
 });
-
-const { position, size } = props.element;
 
 const component = computed(() => {
   switch(props.element.type) {

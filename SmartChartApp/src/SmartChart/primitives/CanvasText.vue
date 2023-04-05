@@ -90,6 +90,7 @@ const onClick = (e: MouseEvent) => {
   height: 100%;
   
   overflow: hidden;
+  white-space: nowrap;
 }
 
 .text-area {
@@ -105,6 +106,8 @@ const onClick = (e: MouseEvent) => {
   outline: none;
   padding: unset;
   margin: unset;
+
+  white-space: nowrap;
 
   -webkit-box-shadow: none;
   -moz-box-shadow: none;

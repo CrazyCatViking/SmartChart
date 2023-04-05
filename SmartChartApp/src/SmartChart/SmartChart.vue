@@ -6,7 +6,7 @@
 <script setup lang="ts">
 import Canvas from './Canvas.vue';
 import Toolbar from './Toolbar/Toolbar.vue';
-import { useChart } from './chart';
+import { useCanvas } from './useCanvas';
 
-const chart = useChart();
+const { chart } = useCanvas();
 </script>

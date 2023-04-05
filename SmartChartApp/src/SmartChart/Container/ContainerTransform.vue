@@ -28,5 +28,7 @@ import RotateAnchor from './anchors/RotateAnchor.vue';
 
   width: 100%;
   height: 100%;
+
+  outline: 1px dotted blue;
 }
 </style>

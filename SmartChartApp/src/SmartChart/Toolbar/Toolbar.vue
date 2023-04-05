@@ -2,28 +2,28 @@
   <div class="toolbar">
     <button
       class="toolbar-button"
-      @click="() => isCreatingEllipse = true"
+      @click="onClickEllipse"
     >
       <span>{{ '+ Ellipse' }}</span>
     </button>
 
     <button
       class="toolbar-button"
-      @click="() => isCreatingRectangle = true"
+      @click="onClickRectangle"
     >
       <span>{{ '+ Rectangle' }}</span>
     </button>
 
     <button
       class="toolbar-button"
-      @click="() => isCreatingText = true"
+      @click="onClickText"
     >
       <span>{{ '+ Text' }}</span>
     </button>
 
     <button
       class="toolbar-button"
-      @click="() => isCreatingImage = true"
+      @click="onClickImage"
     >
       <span>{{ '+ Image' }}</span>
     </button>
@@ -50,15 +50,37 @@ import { GlobalEvents } from 'vue-global-events';
 import { chartInjectionKey } from '../chart';
 import { Element, createEllipse, createImage, createRect, createText } from '../elements';
 import { ElementPosition, ElementSize } from '../types';
+import { canvasStateInjectionKey } from '../canvasState';
 
 const imageUrl = "https://i.guim.co.uk/img/media/26392d05302e02f7bf4eb143bb84c8097d09144b/446_167_3683_2210/master/3683.jpg?width=620&quality=85&dpr=1&s=none";
 
-const { addElement, convertToImage } = inject(chartInjectionKey)!;
+const { addElement, convertToImage, selectElement } = inject(chartInjectionKey)!;
+const { startAddElement, endAddElement } = inject(canvasStateInjectionKey)!;
 
 const isCreatingEllipse = ref(false);
 const isCreatingRectangle = ref(false);
 const isCreatingText = ref(false);
 const isCreatingImage = ref(false);
+
+const onClickEllipse = () => {
+  isCreatingEllipse.value = true
+  startAddElement();
+}
+
+const onClickRectangle = () => {
+  isCreatingRectangle.value = true
+  startAddElement();
+}
+
+const onClickText = () => {
+  isCreatingText.value = true
+  startAddElement();
+}
+
+const onClickImage = () => {
+  isCreatingImage.value = true
+  startAddElement();
+}
 
 const initialPosition = ref({ x: 0, y: 0 });
 let element: Element | undefined;
@@ -93,6 +115,10 @@ const onMouseDown = (e: MouseEvent) => {
     element = image;
     addElement(element);
   }
+
+  if (element != null) {
+    selectElement(element?.id);
+  }
 };
 
 const onMouseMove = (e: MouseEvent) => {
@@ -118,7 +144,10 @@ const onMouseUp = (e: MouseEvent) => {
   isCreatingRectangle.value = false;
   isCreatingText.value = false;
   isCreatingImage.value = false;
+
   element = undefined;
+
+  endAddElement();
 };
 </script>
 

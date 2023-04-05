@@ -1,6 +1,7 @@
 <template>
   <div class="container-rotate"
-    @mousedown="onRotateStart"
+    @mousedown.stop="onRotateStart"
+    @click.stop.prevent
   />
 
   <GlobalEvents

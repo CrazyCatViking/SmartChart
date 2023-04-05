@@ -1,6 +1,7 @@
 <template>
   <div class="container-anchor-top-right"
-    @mousedown="() => isResizing = true"
+    @mousedown.stop="() => isResizing = true"
+    @click.stop
   />
 
   <GlobalEvents

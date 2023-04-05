@@ -1,6 +1,8 @@
-import { Ref, ref, provide, InjectionKey, unref } from "vue";
+import { Ref, ref, provide, InjectionKey, ComputedRef, computed } from "vue";
 import { saveAs } from 'file-saver';
 import { Element } from "./elements/element";
+import { HotKeyState } from "./hotKeyState";
+import { CanvasState } from "./canvasState";
 
 interface Chart {
   elements: Readonly<Ref<Element[]>>;
@@ -10,10 +12,15 @@ interface Chart {
   removeElement: (id: string) => void; 
 
   convertToImage: () => void;
+
+  selectElement: (id: string) => void;
+  resetSelection: () => void;
+  getIsSelected: (id: string) => ComputedRef<boolean>;
+  deleteSelected: () => void;
 }
 
-export const useChart = (): Chart => {
-  const chart = createChart();
+export const useChart = (canvasState: CanvasState, hotKeyState: HotKeyState): Chart => {
+  const chart = createChart(canvasState, hotKeyState);
   provide(chartInjectionKey, chart);
 
   return chart;
@@ -21,7 +28,7 @@ export const useChart = (): Chart => {
 
 export const chartInjectionKey: InjectionKey<Chart> = Symbol('chart-injection-key');
 
-const createChart = (): Chart => {
+const createChart = (canvasState: CanvasState, hotKeyState: HotKeyState): Chart => {
   const _elements: Ref<Element[]> = ref([]);
   const _selectedElements: Ref<string[]> = ref([]);
 
@@ -51,7 +58,28 @@ const createChart = (): Chart => {
       if (blob == null) return;
       saveAs(blob, "chart.png");
     });
-  }
+  };
+
+  const selectElement = (id: string) => {
+    if (hotKeyState.ctrlPressed.value) {
+      _selectedElements.value.push(id);
+      return;
+    }
+
+    _selectedElements.value = [ id ];
+  };
+
+  const resetSelection = () => {
+    _selectedElements.value = [];
+  };
+
+  const getIsSelected = (id: string) => computed(() => _selectedElements.value.includes(id));
+
+  const deleteSelected = () => {
+    console.log('test');
+    _elements.value = _elements.value.filter((element) => !_selectedElements.value.includes(element.id));
+    _selectedElements.value = [];
+  };
 
   return {
     get elements() { return _elements; },
@@ -61,5 +89,10 @@ const createChart = (): Chart => {
     removeElement,
 
     convertToImage,
+
+    selectElement,
+    resetSelection,
+    getIsSelected,
+    deleteSelected,
   }
 }

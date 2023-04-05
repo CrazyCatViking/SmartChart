@@ -13,7 +13,7 @@
 </template>
 
 <script setup lang="ts">
-import { PropType, Ref, computed, ref } from 'vue';
+import { PropType, computed, ref } from 'vue';
 import { Element, Ellipse } from '../elements/';
 
 const props = defineProps({

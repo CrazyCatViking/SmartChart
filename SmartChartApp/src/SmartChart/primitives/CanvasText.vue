@@ -90,7 +90,6 @@ const onClick = (e: MouseEvent) => {
   height: 100%;
   
   overflow: hidden;
-  white-space: nowrap;
 }
 
 .text-area {

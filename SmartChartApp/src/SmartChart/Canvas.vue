@@ -39,11 +39,11 @@ import DragSelect from './DragSelect/DragSelect.vue';
 import { useDragSelect } from './DragSelect/useDragSelect';
 import { createVector } from './Container/vector';
 
-const { elements, resetSelection, deleteSelected } = inject(chartInjectionKey)!;
+const { elements, deleteSelected } = inject(chartInjectionKey)!;
 const { ctrlPressed } = inject(hotKeyStateInjectionKey)!;
 const { isAddingElement } = inject(canvasStateInjectionKey)!;
 
-const { isSelecting, beginSelection, endSelection } = useDragSelect()!;
+const { isSelecting, beginSelection } = useDragSelect()!;
 
 const onDelete = (e: KeyboardEvent) => {
   if (e.key === 'Delete') {
@@ -53,8 +53,6 @@ const onDelete = (e: KeyboardEvent) => {
 
 const onCanvasMouseDown = (e: MouseEvent) => {
   const { clientX, clientY } = e;
-
-  resetSelection();
   beginSelection(createVector(clientX, clientY));
 };
 </script>

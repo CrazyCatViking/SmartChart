@@ -1,6 +1,7 @@
 import { InjectionKey, Ref, inject, provide, ref, unref } from "vue";
 import { Vector, createVector } from "../Container/vector";
 import { chartInjectionKey } from "../chart";
+import { hotKeyStateInjectionKey } from "../hotKeyState";
 
 export interface DragSelectState {
   isSelecting: Readonly<Ref<boolean>>;
@@ -20,12 +21,15 @@ export const useDragSelect = (): DragSelectState => {
 export const dragSelectStateKey: InjectionKey<DragSelectState> = Symbol('drag-select-state-key');
 
 const createDragSelectState = (): DragSelectState => {
-  const { elements, selectElements } = inject(chartInjectionKey)!;
+  const { elements, selectElements, resetSelection } = inject(chartInjectionKey)!;
+  const { ctrlPressed } = inject(hotKeyStateInjectionKey)!;
 
   const _isSelecting = ref(false);
   const _initialPosition = ref<Vector>(createVector(0, 0));
 
   const beginSelection = (initialPosition: Vector) => {
+    if (!ctrlPressed) resetSelection();
+
     _initialPosition.value = initialPosition;
     _isSelecting.value = true;
   };

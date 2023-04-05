@@ -19,7 +19,7 @@
   <GlobalEvents
     @keydown.control.stop="() => ctrlPressed = true"
     @keyup.control.stop="() => ctrlPressed = false"
-    @keydown.delete.stop.prevent="onDelete"
+    @keydown.delete.stop="onDelete"
   />
 </template>
 

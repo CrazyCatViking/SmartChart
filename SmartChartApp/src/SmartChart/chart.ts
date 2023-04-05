@@ -13,7 +13,7 @@ interface Chart {
 
   convertToImage: () => void;
 
-  selectElement: (id: string) => void;
+  selectElements: (...ids: string[]) => void;
   resetSelection: () => void;
   getIsSelected: (id: string) => ComputedRef<boolean>;
   deleteSelected: () => void;
@@ -60,13 +60,13 @@ const createChart = (canvasState: CanvasState, hotKeyState: HotKeyState): Chart 
     });
   };
 
-  const selectElement = (id: string) => {
+  const selectElements = (...ids: string[]) => {
     if (hotKeyState.ctrlPressed.value) {
-      _selectedElements.value.push(id);
+      _selectedElements.value.push(...ids);
       return;
     }
 
-    _selectedElements.value = [ id ];
+    _selectedElements.value = [ ...ids ];
   };
 
   const resetSelection = () => {
@@ -89,7 +89,7 @@ const createChart = (canvasState: CanvasState, hotKeyState: HotKeyState): Chart 
 
     convertToImage,
 
-    selectElement,
+    selectElements,
     resetSelection,
     getIsSelected,
     deleteSelected,

@@ -1,4 +1,5 @@
 import { InjectionKey, Ref, ref, provide } from "vue";
+import { createVector } from "./Container/vector";
 
 export interface CanvasState {
   isAddingElement: Readonly<Ref<boolean>>;

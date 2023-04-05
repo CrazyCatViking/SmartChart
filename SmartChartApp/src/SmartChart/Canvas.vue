@@ -1,7 +1,12 @@
 <template>
+  <DragSelect
+    v-if="isSelecting"
+  />
+
   <div
     class="canvas"
-    @click="resetSelection"
+    @mousedown="onCanvasMouseDown"
+    draggable="false"
   >
     <CanvasElement
       v-for="element in elements"
@@ -30,15 +35,27 @@ import CanvasElement from './CanvasElement.vue';
 import { chartInjectionKey } from './chart';
 import { hotKeyStateInjectionKey } from './hotKeyState';
 import { canvasStateInjectionKey } from './canvasState';
+import DragSelect from './DragSelect/DragSelect.vue';
+import { useDragSelect } from './DragSelect/useDragSelect';
+import { createVector } from './Container/vector';
 
 const { elements, resetSelection, deleteSelected } = inject(chartInjectionKey)!;
 const { ctrlPressed } = inject(hotKeyStateInjectionKey)!;
 const { isAddingElement } = inject(canvasStateInjectionKey)!;
 
+const { isSelecting, beginSelection, endSelection } = useDragSelect()!;
+
 const onDelete = (e: KeyboardEvent) => {
   if (e.key === 'Delete') {
     deleteSelected();
   }
+};
+
+const onCanvasMouseDown = (e: MouseEvent) => {
+  const { clientX, clientY } = e;
+
+  resetSelection();
+  beginSelection(createVector(clientX, clientY));
 };
 </script>
 

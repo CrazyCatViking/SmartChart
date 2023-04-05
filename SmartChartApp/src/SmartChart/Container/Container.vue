@@ -41,7 +41,7 @@ const props = defineProps({
 
 const internalElement = ref(props.element);
 
-const { selectElement, getIsSelected } = inject(chartInjectionKey)!;
+const { selectElements: selectElement, getIsSelected } = inject(chartInjectionKey)!;
 const isSelected = getIsSelected(internalElement.value.id);
 
 const isDragging = ref(false);

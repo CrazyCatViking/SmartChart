@@ -1,9 +1,10 @@
 import { ref, computed, provide, InjectionKey, Ref } from "vue";
 import { ElementPosition, ElementSize, RectBaseCoordinates, RectVertices } from "../types";
 import { Vector, createVector } from "./vector";
+import { Element } from "../elements";
 
-export const useRect = (elPosition: ElementPosition, elSize: ElementSize) => {
-  const rect = createRect(elPosition, elSize);
+export const useRect = (element: Element) => {
+  const rect = createRect(element);
   provide(rectInjectionToken, rect);
 
   return rect;
@@ -24,9 +25,12 @@ interface Rect {
   resizeRectBottomLeft: (newBottomLeft: Vector) => void;
 }
 
-const createRect = (elPosition: ElementPosition, elSize: ElementSize): Rect => {
-  const rectPosition = ref(elPosition);
-  const rectSize = ref(elSize);
+const createRect = (element: Element): Rect => {
+  // I have managed to create some complicated mess with all these
+  // nested refs. Refactoring is needed to remove some of the refs
+  const internalElement = ref(element);
+  const rectPosition = ref(internalElement.value.position);
+  const rectSize = ref(internalElement.value.size);
 
   const rectBaseCoordinates = computed<RectBaseCoordinates>(() => {
     const { x, y } = rectPosition.value;
@@ -55,19 +59,18 @@ const createRect = (elPosition: ElementPosition, elSize: ElementSize): Rect => {
   });
 
   const rotateRect = (pageX: number, pageY: number) => {
-    const rectCenter = {
-      x: rectPosition.value.x + rectSize.value.width / 2,
-      y: rectPosition.value.y + rectSize.value.height / 2,
-    };
+    const rectCenter = createVector(
+      rectPosition.value.x + rectSize.value.width / 2,
+      rectPosition.value.y + rectSize.value.height / 2,
+    );
 
-    const rotation = Math.atan2(pageX - rectCenter.x, - (pageY - rectCenter.y));
+    const mousePosition = createVector(pageX, pageY);
 
-    rectPosition.value.rotation = rotation;
+    internalElement.value.rotate(mousePosition, rectCenter);
   }
 
   const moveRect = (deltaX: number, deltaY: number) => {
-    rectPosition.value.x += deltaX;
-    rectPosition.value.y += deltaY;
+    internalElement.value.move(deltaX, deltaY);
   }
 
   const resizeRectTopRight = (newTopRight: Vector) => {
@@ -80,7 +83,7 @@ const createRect = (elPosition: ElementPosition, elSize: ElementSize): Rect => {
     const { x: x2, y: y1 } = newTopRight.rotate(-angle, newCenter);
     const { x: x1, y: y2 } = d.rotate(-angle, newCenter);
   
-    resizeRect(createVector(x1, y1), createVector(x2, y2));
+    element.resize(createVector(x1, y1), createVector(x2, y2));
   };
 
   const resizeRectTopLeft = (newTopLeft: Vector) => {
@@ -93,7 +96,7 @@ const createRect = (elPosition: ElementPosition, elSize: ElementSize): Rect => {
     const { x: x1, y: y1 } = newTopLeft.rotate(-rotation, newCenter);
     const { x: x2, y: y2 } = c.rotate(-rotation, newCenter);
 
-    resizeRect(createVector(x1, y1), createVector(x2, y2));
+    element.resize(createVector(x1, y1), createVector(x2, y2));
   };
 
   const resizeRectBottomRight = (newBottomRight: Vector) => {
@@ -106,7 +109,7 @@ const createRect = (elPosition: ElementPosition, elSize: ElementSize): Rect => {
     const { x: x2, y: y2 } = newBottomRight.rotate(-rotation, newCenter);
     const { x: x1, y: y1 } = a.rotate(-rotation, newCenter);
 
-    resizeRect(createVector(x1, y1), createVector(x2, y2));
+    element.resize(createVector(x1, y1), createVector(x2, y2));
   };
 
   const resizeRectBottomLeft = (newBottomLeft: Vector) => {
@@ -119,14 +122,7 @@ const createRect = (elPosition: ElementPosition, elSize: ElementSize): Rect => {
     const { x: x1, y: y2 } = newBottomLeft.rotate(-rotation, newCenter);
     const { x: x2, y: y1 } = b.rotate(-rotation, newCenter);
 
-    resizeRect(createVector(x1, y1), createVector(x2, y2));
-  };
-
-  const resizeRect = ({ x: x1, y: y1 }: Vector, { x: x2, y: y2 }: Vector) => {
-    rectPosition.value.x = x1;
-    rectPosition.value.y = y1;
-    rectSize.value.width = x2 - x1;
-    rectSize.value.height = y2 - y1;
+    element.resize(createVector(x1, y1), createVector(x2, y2));
   };
 
   return {

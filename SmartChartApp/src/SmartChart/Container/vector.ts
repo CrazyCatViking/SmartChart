@@ -3,6 +3,7 @@ export interface Vector {
   y: Readonly<number>;
 
   rotate: (angle: number, rotationCenter?: Vector) => Vector;
+  translate: (dx: number, dy: number) => Vector;
   getCenter: (vectorB: Vector) => Vector;
 };
 
@@ -20,6 +21,11 @@ export const createVector = (x: number, y: number) => {
     return createVector(rotatedX, rotatedY);
   };
 
+  const translate = (dx: number, dy: number) => createVector(
+    _x + dx,
+    _y + dy,
+  );
+
   const getCenter = (vectorB: Vector): Vector => createVector(
     (_x + vectorB.x) / 2,
     (_y + vectorB.y) / 2,
@@ -30,6 +36,7 @@ export const createVector = (x: number, y: number) => {
     get y() { return _y },
 
     rotate,
+    translate,
     getCenter,
   }
 }

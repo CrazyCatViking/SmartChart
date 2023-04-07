@@ -2,11 +2,12 @@
   <div
     class="container" 
     :style="style"
-    :tabindex="internalElement.position.z"
+    :tabindex="rectPosition.z"
+    draggable="false"
     @mousedown.stop="onSelectElement"
     @click.stop.prevent
   >
-    <ContainerTransform v-show="isSelected" />
+    <ContainerTransform v-show="isSelected" draggable="false" />
 
     <div
       class="container-content"
@@ -25,7 +26,7 @@
 </template>
 
 <script setup lang="ts">
-import { PropType, computed, inject, ref } from 'vue';
+import { PropType, computed, inject, ref, toRef } from 'vue';
 import { GlobalEvents } from 'vue-global-events';
 import { useRect } from './useRect';
 import ContainerTransform from './ContainerTransform.vue';
@@ -39,10 +40,8 @@ const props = defineProps({
   },
 });
 
-const internalElement = ref(props.element);
-
 const { selectElements: selectElement, getIsSelected } = inject(chartInjectionKey)!;
-const isSelected = getIsSelected(internalElement.value.id);
+const isSelected = getIsSelected(props.element.id);
 
 const isDragging = ref(false);
 
@@ -52,10 +51,10 @@ const {
   rectPosition,
   rectSize,
   moveRect,
-} = useRect(internalElement.value.position, internalElement.value.size);
+} = useRect(props.element);
 
 const onSelectElement = () => {
-  const id = internalElement.value.id;
+  const id = props.element.id;
   selectElement(id);
 };
 

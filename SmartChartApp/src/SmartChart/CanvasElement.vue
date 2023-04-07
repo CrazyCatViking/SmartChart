@@ -1,6 +1,7 @@
 <template>
   <Container :element="element">
     <component
+      v-if="element !== undefined"
       :is="component"
       :element="element"
     />
@@ -33,6 +34,8 @@ const component = computed(() => {
       return Image;
     case 'Text':
       return TextElement;
+    default:
+      return undefined;
   }
 });
 </script>

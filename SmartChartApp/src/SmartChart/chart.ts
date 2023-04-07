@@ -1,8 +1,9 @@
-import { Ref, ref, provide, InjectionKey, ComputedRef, computed } from "vue";
+import { Ref, ref, provide, InjectionKey, ComputedRef, computed, watch } from "vue";
 import { saveAs } from 'file-saver';
 import { Element } from "./elements/element";
 import { HotKeyState } from "./hotKeyState";
 import { CanvasState } from "./canvasState";
+import { ElementGroup, createGroup } from "./elements/elementGroup";
 
 interface Chart {
   elements: Readonly<Ref<Element[]>>;
@@ -31,6 +32,23 @@ export const chartInjectionKey: InjectionKey<Chart> = Symbol('chart-injection-ke
 const createChart = (canvasState: CanvasState, hotKeyState: HotKeyState): Chart => {
   const _elements: Ref<Element[]> = ref([]);
   const _selectedElements: Ref<string[]> = ref([]);
+
+  const selectionGroupId = ref<string>();
+
+  watch(_selectedElements, (value) => {
+    if (selectionGroupId.value) {
+      removeElement(selectionGroupId.value);
+      selectionGroupId.value = undefined;
+    }
+
+    if (value.length <= 1) return;
+
+    const elements = _elements.value.filter((element) => value.includes(element.id));
+    const groupElement = createGroup(elements);
+    
+    selectionGroupId.value = groupElement.id;
+    addElement(groupElement);
+  }, { deep: true });
 
   const addElement = (element: Element) => {
     _elements.value.push(element);
@@ -61,6 +79,8 @@ const createChart = (canvasState: CanvasState, hotKeyState: HotKeyState): Chart 
   };
 
   const selectElements = (...ids: string[]) => {
+    if (ids.some(id => id === selectionGroupId.value)) return;
+
     if (hotKeyState.ctrlPressed.value) {
       _selectedElements.value.push(...ids);
       return;
@@ -73,7 +93,19 @@ const createChart = (canvasState: CanvasState, hotKeyState: HotKeyState): Chart 
     _selectedElements.value = [];
   };
 
-  const getIsSelected = (id: string) => computed(() => _selectedElements.value.includes(id));
+  const getIsSelected = (id: string) => computed(() => {
+    if (_selectedElements.value.length === 1) {
+      return _selectedElements.value.includes(id);
+    }
+
+    const element = _elements.value.find((element) => element.id === id);
+    
+    if (element?.type !== 'Group') return false;
+
+    const group = element as ElementGroup;
+
+    return group.children.every((child) => _selectedElements.value.includes(child.id));
+  });
 
   const deleteSelected = () => {
     _elements.value = _elements.value.filter((element) => !_selectedElements.value.includes(element.id));

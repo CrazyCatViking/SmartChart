@@ -52,11 +52,8 @@ export const createGroup = (children: Element[]): ElementGroup => {
     _position.value.y += deltaY;
   };
 
-  const resize = ({ x: x1, y: y1 }: Vector, { x: x2, y: y2 }: Vector) => {
-    _position.value.x = x1;
-    _position.value.y = y1;
-    _size.value.width = x2 - x1;
-    _size.value.height = y2 - y1;
+  const resize = (mousePosition: Vector, anchorPosition: Vector) => {
+    element.resize(mousePosition, anchorPosition);
   };
 
   const render = (ctx: CanvasRenderingContext2D) => { };

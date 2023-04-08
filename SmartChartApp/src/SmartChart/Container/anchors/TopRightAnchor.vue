@@ -1,13 +1,13 @@
 <template>
   <div class="container-anchor-top-right"
-    @mousedown.stop="() => isResizing = true"
+    @mousedown.stop="onResizeStart"
     @click.stop
   />
 
   <GlobalEvents
     v-if="isResizing"
     @mousemove="onResize"
-    @mouseup="() => isResizing = false"
+    @mouseup="onResizeEnd"
   />
 </template>
 
@@ -15,17 +15,28 @@
 import { ref, inject } from 'vue';
 import { GlobalEvents } from 'vue-global-events';
 import { rectInjectionToken } from '../useRect';
-import { createVector } from '../vector';
+import { Vector, createVector } from '../vector';
 
-const { resizeRectTopRight } = inject(rectInjectionToken)!;
+const { resizeRect, rectVertices } = inject(rectInjectionToken)!;
 
 const isResizing = ref(false);
+const initialPosition = ref<Vector>()
+
+const onResizeStart = () => {
+  isResizing.value = true
+  initialPosition.value = rectVertices.value.d;
+};
+
+const onResizeEnd = () => {
+  isResizing.value = false
+  initialPosition.value = undefined;
+};
 
 const onResize = (e: MouseEvent) => {
   const { clientX, clientY } = e;
-  const newTopRight = createVector(clientX, clientY);
+  const mousePosition = createVector(clientX, clientY);
 
-  resizeRectTopRight(newTopRight);
+  resizeRect(mousePosition, initialPosition.value!);
 };
 </script>
 

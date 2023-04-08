@@ -16,7 +16,7 @@ export interface Element {
 
   rotate: (mousePosition: Vector, rotationCenter: Vector) => void;
   move: (clientX: number, clientY: number) => void;
-  resize: (topLeft: Vector, bottomRight: Vector) => void;
+  resize: (mousePosition: Vector, anchorPosition: Vector) => void;
 }
 
 export const createElement = (position: ElementPosition, size: ElementSize, type: ElementType): Element => {
@@ -36,11 +36,24 @@ export const createElement = (position: ElementPosition, size: ElementSize, type
     _position.value.y += deltaY;
   };
 
-  const resize = ({ x: x1, y: y1 }: Vector, { x: x2, y: y2 }: Vector) => {
-    _position.value.x = x1;
-    _position.value.y = y1;
-    _size.value.width = x2 - x1;
-    _size.value.height = y2 - y1;
+  const resize = (mousePosition: Vector, anchorPosition: Vector) => {
+    const angle = _position.value.rotation;
+
+    const newCenter = anchorPosition.getCenter(mousePosition);
+
+    const { x, y } = anchorPosition.rotate(-angle, newCenter);
+    const { x: clientX, y: clientY } = mousePosition.rotate(-angle, newCenter);
+
+    const newX = x < clientX ? x : clientX;
+    const newY = y < clientY ? y : clientY;
+
+    const width = Math.abs(clientX - x);
+    const height = Math.abs(clientY - y);
+
+    _position.value.x = newX;
+    _position.value.y = newY;
+    _size.value.width = width;
+    _size.value.height = height;
   };
 
   const throwRenderNotImplemented = () => {

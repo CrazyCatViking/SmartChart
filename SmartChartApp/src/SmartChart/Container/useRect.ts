@@ -1,7 +1,9 @@
-import { ref, computed, provide, InjectionKey, Ref } from "vue";
+import { ref, computed, provide, InjectionKey, Ref, ComputedRef } from "vue";
 import { ElementPosition, ElementSize, RectBaseCoordinates, RectVertices } from "../types";
 import { Vector, createVector } from "./vector";
 import { Element } from "../elements";
+
+type ResizeInput = { mousePosition: Vector, anchorPosition: Vector };
 
 export const useRect = (element: Element) => {
   const rect = createRect(element);
@@ -15,14 +17,11 @@ export const rectInjectionToken: InjectionKey<Rect> = Symbol('rect-injection-tok
 interface Rect {
   rectPosition: Ref<ElementPosition>;
   rectSize: Ref<ElementSize>;
+  rectVertices: ComputedRef<RectVertices>;
 
   rotateRect: (pageX: number, pageY: number) => void;
   moveRect: (clientX: number, clientY: number) => void;
-
-  resizeRectTopRight: (newTopRight: Vector) => void;
-  resizeRectTopLeft: (newTopLeft: Vector) => void;
-  resizeRectBottomRight: (newBottomRight: Vector) => void;
-  resizeRectBottomLeft: (newBottomLeft: Vector) => void;
+  resizeRect: (mousePosition: Vector, anchorPosition: Vector) => void;
 }
 
 const createRect = (element: Element): Rect => {
@@ -73,69 +72,18 @@ const createRect = (element: Element): Rect => {
     internalElement.value.move(deltaX, deltaY);
   }
 
-  const resizeRectTopRight = (newTopRight: Vector) => {
-    const originalVertices = rectVertices.value;
-    const angle = rectPosition.value.rotation;
-  
-    const { d } = originalVertices;
-    const newCenter = d.getCenter(newTopRight);
-  
-    const { x: x2, y: y1 } = newTopRight.rotate(-angle, newCenter);
-    const { x: x1, y: y2 } = d.rotate(-angle, newCenter);
-  
-    element.resize(createVector(x1, y1), createVector(x2, y2));
-  };
-
-  const resizeRectTopLeft = (newTopLeft: Vector) => {
-    const originalVertices = rectVertices.value;
-    const rotation = rectPosition.value.rotation;
-  
-    const { c } = originalVertices;
-    const newCenter = c.getCenter(newTopLeft);
-  
-    const { x: x1, y: y1 } = newTopLeft.rotate(-rotation, newCenter);
-    const { x: x2, y: y2 } = c.rotate(-rotation, newCenter);
-
-    element.resize(createVector(x1, y1), createVector(x2, y2));
-  };
-
-  const resizeRectBottomRight = (newBottomRight: Vector) => {
-    const originalVertices = rectVertices.value;
-    const rotation = rectPosition.value.rotation;
-  
-    const { a } = originalVertices;
-    const newCenter = a.getCenter(newBottomRight);
-  
-    const { x: x2, y: y2 } = newBottomRight.rotate(-rotation, newCenter);
-    const { x: x1, y: y1 } = a.rotate(-rotation, newCenter);
-
-    element.resize(createVector(x1, y1), createVector(x2, y2));
-  };
-
-  const resizeRectBottomLeft = (newBottomLeft: Vector) => {
-    const originalVertices = rectVertices.value;
-    const rotation = rectPosition.value.rotation;
-  
-    const { b } = originalVertices;
-    const newCenter = b.getCenter(newBottomLeft);
-
-    const { x: x1, y: y2 } = newBottomLeft.rotate(-rotation, newCenter);
-    const { x: x2, y: y1 } = b.rotate(-rotation, newCenter);
-
-    element.resize(createVector(x1, y1), createVector(x2, y2));
-  };
+  const resizeRect = (mousePosition: Vector, anchorPosition: Vector) => {
+    element.resize(mousePosition, anchorPosition);
+  }
 
   return {
     rectPosition,
     rectSize,
+    rectVertices,
 
     rotateRect,
     moveRect,
-
-    resizeRectTopRight,
-    resizeRectTopLeft,
-    resizeRectBottomRight,
-    resizeRectBottomLeft,
+    resizeRect,
   };
 };
 

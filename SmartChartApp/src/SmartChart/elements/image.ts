@@ -1,5 +1,4 @@
 import { createVector } from "../utility/vector";
-import { ElementPosition, ElementSize } from "../types";
 import { Element, ElementData, createElement } from "./element";
 
 export interface Image extends Element {

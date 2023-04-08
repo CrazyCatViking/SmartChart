@@ -24,8 +24,6 @@ interface Rect {
 }
 
 const createRect = (element: Element): Rect => {
-  // I have managed to create some complicated mess with all these
-  // nested refs. Refactoring is needed to remove some of the refs
   const { ctrlPressed } = inject(hotKeyStateInjectionKey)!;
 
   const rectPosition = element.position;

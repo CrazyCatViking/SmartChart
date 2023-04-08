@@ -1,7 +1,6 @@
 import {
   Ref,
   ref,
-  unref,
   provide,
   InjectionKey,
   ComputedRef,
@@ -15,8 +14,6 @@ import { HotKeyState } from "./hotKeyState";
 import { CanvasState } from "./canvasState";
 import { ElementGroup, createGroup } from "./elements/elementGroup";
 import { createChartHistory } from "./chartHistory";
-import { cloneDeep } from "lodash";
-import { serializeChart } from "./utility/chartSerializer";
 
 interface Chart {
   elements: Readonly<Ref<Element[]>>;

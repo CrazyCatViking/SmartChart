@@ -1,5 +1,3 @@
-import { Ref } from "vue";
-import { ElementPosition, ElementSize } from "../types";
 import { Element, ElementData, createElement } from "./element";
 
 export interface Rectangle extends Element {

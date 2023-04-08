@@ -1,6 +1,6 @@
-import { unref, ref } from "vue";
+import { unref } from "vue";
 import { Vector } from "../utility/vector";
-import { ElementPosition, ElementSize, RectVertices } from "../types";
+import { ElementPosition, ElementSize } from "../types";
 import { Element, createElement } from "./element";
 
 export interface ElementGroup extends Element {

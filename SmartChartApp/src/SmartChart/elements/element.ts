@@ -1,4 +1,4 @@
-import { Ref, unref, ref } from "vue";
+import { Ref, ref } from "vue";
 import { ElementPosition, ElementSize } from "../types";
 import { v4 as uuidv4 } from 'uuid';
 import { Vector, createVector } from "../utility/vector";

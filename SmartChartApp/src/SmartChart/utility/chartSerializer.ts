@@ -13,7 +13,7 @@ import {
 
 export const serializeChart = (elements: Element[]): string => {
   // This is a hack to unwrap the nested refs
-  const _elements = ref(elements);
+  const _elements = ref(elements.filter((element) => element.type !== 'Group'));
   return JSON.stringify(unref(_elements));
 };
 

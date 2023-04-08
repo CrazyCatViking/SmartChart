@@ -43,7 +43,13 @@ import DragSelect from './DragSelect/DragSelect.vue';
 import { useDragSelect } from './DragSelect/useDragSelect';
 import { createVector } from './utility/vector';
 
-const { elements, deleteSelected, undoChanges, redoChanges } = inject(chartInjectionKey)!;
+const {
+  elements,
+  deleteSelected,
+  undoChanges,
+  redoChanges,
+  commitChanges,
+} = inject(chartInjectionKey)!;
 const { ctrlPressed } = inject(hotKeyStateInjectionKey)!;
 const { isAddingElement } = inject(canvasStateInjectionKey)!;
 
@@ -52,6 +58,7 @@ const { isSelecting, beginSelection } = useDragSelect()!;
 const onDelete = (e: KeyboardEvent) => {
   if (e.key === 'Delete') {
     deleteSelected();
+    commitChanges();
   }
 };
 

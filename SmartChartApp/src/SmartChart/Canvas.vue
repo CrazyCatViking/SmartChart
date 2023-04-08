@@ -67,6 +67,10 @@ const onCanvasMouseDown = (e: MouseEvent) => {
   width: 100%;
 
   background-color: white;
+
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
 }
 
 .canvas-draw-zone {

@@ -1,4 +1,4 @@
-import { Ref, ref, unref } from "vue";
+import { Ref, ref } from "vue";
 import { ElementPosition, ElementSize } from "../types";
 import { v4 as uuidv4 } from 'uuid';
 import { Vector, createVector } from "../utility/vector";
@@ -74,8 +74,8 @@ export const createElement = (position: ElementPosition, size: ElementSize, type
   }
 
   const getVertices = () => {
-    const { x, y } = unref(_position);
-    const { width, height } = unref(_size);
+    const { x, y } = _position.value;
+    const { width, height } = _size.value;
 
     const x1 = x;
     const x2 = x + width;

@@ -1,6 +1,6 @@
 import { ref, computed, provide, InjectionKey, Ref, ComputedRef, inject } from "vue";
 import { ElementPosition, ElementSize, RectBaseCoordinates, RectVertices } from "../types";
-import { Vector, createVector } from "./vector";
+import { Vector, createVector } from "../utility/vector";
 import { Element } from "../elements";
 import { hotKeyStateInjectionKey } from "../hotKeyState";
 

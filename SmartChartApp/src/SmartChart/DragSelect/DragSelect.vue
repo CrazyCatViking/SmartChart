@@ -16,7 +16,7 @@
 import { StyleValue, computed, inject, ref } from 'vue';
 import { GlobalEvents } from 'vue-global-events';
 import { dragSelectStateKey } from './useDragSelect';
-import { Vector, createVector } from '../Container/vector';
+import { Vector, createVector } from '../utility/vector';
 
 const { isSelecting, initialPosition, endSelection } = inject(dragSelectStateKey)!;
 

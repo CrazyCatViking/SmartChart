@@ -37,7 +37,7 @@ import { hotKeyStateInjectionKey } from './hotKeyState';
 import { canvasStateInjectionKey } from './canvasState';
 import DragSelect from './DragSelect/DragSelect.vue';
 import { useDragSelect } from './DragSelect/useDragSelect';
-import { createVector } from './Container/vector';
+import { createVector } from './utility/vector';
 
 const { elements, deleteSelected } = inject(chartInjectionKey)!;
 const { ctrlPressed } = inject(hotKeyStateInjectionKey)!;

@@ -1,7 +1,7 @@
 import { Ref, ref, unref } from "vue";
 import { ElementPosition, ElementSize } from "../types";
 import { v4 as uuidv4 } from 'uuid';
-import { Vector, createVector } from "../Container/vector";
+import { Vector, createVector } from "../utility/vector";
 import { Vertices, createVertices } from "../utility/vertices";
 
 type ElementType = 'Image' | 'Rectangle' | 'Ellipse' | 'Text' | 'Group';

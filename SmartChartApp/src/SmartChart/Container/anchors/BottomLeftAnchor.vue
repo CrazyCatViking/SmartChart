@@ -15,7 +15,7 @@
 import { ref, inject } from 'vue';
 import { GlobalEvents } from 'vue-global-events';
 import { rectInjectionToken } from '../useRect';
-import { Vector, createVector } from '../vector';
+import { Vector, createVector } from '../../utility/vector';
 
 const { resizeRect, rectVertices } = inject(rectInjectionToken)!;
 

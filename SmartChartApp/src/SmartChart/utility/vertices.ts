@@ -1,4 +1,4 @@
-import { Vector, createVector } from "../Container/vector";
+import { Vector, createVector } from "./vector";
 import { ElementPosition, ElementSize } from "../types";
 
 export interface Vertices {

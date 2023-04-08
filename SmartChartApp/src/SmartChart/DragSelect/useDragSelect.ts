@@ -1,5 +1,5 @@
 import { InjectionKey, Ref, inject, provide, ref, unref } from "vue";
-import { Vector, createVector } from "../Container/vector";
+import { Vector, createVector } from "../utility/vector";
 import { chartInjectionKey } from "../chart";
 import { hotKeyStateInjectionKey } from "../hotKeyState";
 

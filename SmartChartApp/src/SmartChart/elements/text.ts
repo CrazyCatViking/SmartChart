@@ -1,5 +1,5 @@
 import { Ref, ref } from "vue";
-import { createVector } from "../Container/vector";
+import { createVector } from "../utility/vector";
 import { ElementPosition, ElementSize } from "../types";
 import { Element, createElement } from "./element";
 

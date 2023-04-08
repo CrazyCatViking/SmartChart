@@ -1,5 +1,5 @@
 import { unref } from "vue";
-import { Vector, createVector } from "../Container/vector";
+import { Vector, createVector } from "../utility/vector";
 import { ElementPosition, ElementSize, RectVertices } from "../types";
 import { Element, createElement } from "./element";
 import { createVertices } from "../utility/vertices";

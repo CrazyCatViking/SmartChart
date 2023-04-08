@@ -1,4 +1,4 @@
-import { Vector } from "./Container/vector";
+import { Vector } from "./utility/vector";
 
 export type RectVertices = { a: Vector, b: Vector, c: Vector, d: Vector };
 export type RectBaseCoordinates = { x1: number, x2: number, y1: number, y2: number };

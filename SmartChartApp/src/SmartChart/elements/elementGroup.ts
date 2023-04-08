@@ -25,7 +25,7 @@ export const createGroup = (children: Element[]): ElementGroup => {
 
     _children.forEach((child) => {
       const childPos = unref(child.position); // Realy need to figure out this mess with refs!!
-      const vertices = getElementVertices(child);
+      const vertices = child.getVertices();
 
       const oldChildCenter = vertices.a.getCenter(vertices.c);
       const newChildCenter = oldChildCenter.rotate(dRotation, rotationCenter);
@@ -53,27 +53,43 @@ export const createGroup = (children: Element[]): ElementGroup => {
   };
 
   const resize = (mousePosition: Vector, anchorPosition: Vector) => {
-    element.resize(mousePosition, anchorPosition);
+    const vertices = element.getVertices();
+
+    const center = vertices.a.getCenter(vertices.c);
+    
+    const mouseDistance = mousePosition.getDistance(center);
+    const aDistance = vertices.a.getDistance(center);
+
+    const scaleFactor = mouseDistance / aDistance;
+
+    scale(scaleFactor, anchorPosition);
   };
 
-  const render = (ctx: CanvasRenderingContext2D) => { };
+  const scale = (scaleFactor: number, anchorPosition: Vector) => {
+    _children.forEach((child) => {
+      child.scale(scaleFactor, anchorPosition)
+    });
+
+    element.scale(scaleFactor, anchorPosition);
+  }
 
   return {
     ...element,
 
     get children() { return _children },
 
-    render,
     rotate,
     move,
     resize,
+    scale,
   };
 };
 
 const getGroupPositionAndSize = (children: Element[]) => {
   const childrenVertices = children.map((child) => {
     const { rotation } = unref(child.position);
-    const vertices = getElementVertices(child);
+    const vertices = child.getVertices();
+
     const rotationCenter = vertices.a.getCenter(vertices.c);
 
     return vertices.rotate(rotation, rotationCenter);
@@ -105,21 +121,4 @@ const getGroupPositionAndSize = (children: Element[]) => {
   const size: ElementSize = { width: maxX - minX, height: maxY - minY };
 
   return { position, size };
-}
-
-const getElementVertices = (element: Element) => {
-  const { x, y } = unref(element.position);
-  const { width, height } = unref(element.size);
-
-  const x1 = x;
-  const x2 = x + width;
-  const y1 = y;
-  const y2 = y + height;
-
-  return createVertices({
-    a: createVector(x1, y1),
-    b: createVector(x2, y1),
-    c: createVector(x2, y2),
-    d: createVector(x1, y2),
-  });
 };

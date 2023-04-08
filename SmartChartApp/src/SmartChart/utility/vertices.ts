@@ -11,6 +11,7 @@ export interface Vertices {
 
   rotate: (angle: number, rotationCenter: Vector) => Vertices;
   translate: (x: number, y: number) => Vertices;
+  scale: (scaleFactor: number) => Vertices;
 }
 
 export const createVertices = (vertices: { a: Vector, b: Vector, c: Vector, d: Vector }): Vertices => {
@@ -38,16 +39,19 @@ export const createVertices = (vertices: { a: Vector, b: Vector, c: Vector, d: V
     d: _d.rotate(angle, rotationCenter),
   });
 
-  const translate = (x: number, y: number): Vertices => {
-    const center = _a.getCenter(_c);
+  const translate = (x: number, y: number): Vertices => createVertices({
+    a: _a.translate(x, y),
+    b: _b.translate(x, y),
+    c: _c.translate(x, y),
+    d: _d.translate(x, y),
+  });
 
-    return createVertices({
-      a: _a.translate(x, y),
-      b: _b.translate(x, y),
-      c: _c.translate(x, y),
-      d: _d.translate(x, y),
-    });
-  };
+  const scale = (scaleFactor: number): Vertices => createVertices({
+    a: _a.scale(scaleFactor),
+    b: _b.scale(scaleFactor),
+    c: _c.scale(scaleFactor),
+    d: _d.scale(scaleFactor),
+  });
 
   return {
     get a() { return _a; },
@@ -59,5 +63,6 @@ export const createVertices = (vertices: { a: Vector, b: Vector, c: Vector, d: V
 
     rotate,
     translate,
+    scale,
   }
 } 

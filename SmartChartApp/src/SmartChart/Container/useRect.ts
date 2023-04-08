@@ -1,9 +1,8 @@
-import { ref, computed, provide, InjectionKey, Ref, ComputedRef } from "vue";
+import { ref, computed, provide, InjectionKey, Ref, ComputedRef, inject } from "vue";
 import { ElementPosition, ElementSize, RectBaseCoordinates, RectVertices } from "../types";
 import { Vector, createVector } from "./vector";
 import { Element } from "../elements";
-
-type ResizeInput = { mousePosition: Vector, anchorPosition: Vector };
+import { hotKeyStateInjectionKey } from "../hotKeyState";
 
 export const useRect = (element: Element) => {
   const rect = createRect(element);
@@ -27,6 +26,8 @@ interface Rect {
 const createRect = (element: Element): Rect => {
   // I have managed to create some complicated mess with all these
   // nested refs. Refactoring is needed to remove some of the refs
+  const { ctrlPressed } = inject(hotKeyStateInjectionKey)!;
+
   const internalElement = ref(element);
   const rectPosition = ref(internalElement.value.position);
   const rectSize = ref(internalElement.value.size);
@@ -66,14 +67,32 @@ const createRect = (element: Element): Rect => {
     const mousePosition = createVector(pageX, pageY);
 
     internalElement.value.rotate(mousePosition, rectCenter);
-  }
+  };
 
   const moveRect = (deltaX: number, deltaY: number) => {
     internalElement.value.move(deltaX, deltaY);
-  }
+  };
 
   const resizeRect = (mousePosition: Vector, anchorPosition: Vector) => {
+    if (ctrlPressed.value) {
+      scale(mousePosition, anchorPosition);
+      return;
+    }
+
     element.resize(mousePosition, anchorPosition);
+  };
+
+  const scale = (mousePosition: Vector, anchorPosition: Vector) => {
+    const vertices = element.getVertices();
+
+    const center = vertices.a.getCenter(vertices.c);
+
+    const mouseDistance = mousePosition.getDistance(center);
+    const aDistance = vertices.a.getDistance(center);
+
+    const scaleFactor = mouseDistance / aDistance;
+
+    element.scale(scaleFactor, anchorPosition);
   }
 
   return {

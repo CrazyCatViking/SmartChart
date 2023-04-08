@@ -1,7 +1,8 @@
-import { Ref, ref } from "vue";
+import { Ref, ref, unref } from "vue";
 import { ElementPosition, ElementSize } from "../types";
 import { v4 as uuidv4 } from 'uuid';
-import { Vector } from "../Container/vector";
+import { Vector, createVector } from "../Container/vector";
+import { Vertices, createVertices } from "../utility/vertices";
 
 type ElementType = 'Image' | 'Rectangle' | 'Ellipse' | 'Text' | 'Group';
 
@@ -17,6 +18,8 @@ export interface Element {
   rotate: (mousePosition: Vector, rotationCenter: Vector) => void;
   move: (clientX: number, clientY: number) => void;
   resize: (mousePosition: Vector, anchorPosition: Vector) => void;
+  scale: (scaleFactor: number, anchorPosition: Vector) => void;
+  getVertices: () => Vertices;
 }
 
 export const createElement = (position: ElementPosition, size: ElementSize, type: ElementType): Element => {
@@ -56,6 +59,37 @@ export const createElement = (position: ElementPosition, size: ElementSize, type
     _size.value.height = height;
   };
 
+  const scale = (scaleFactor: number, { x: anchorX, y: anchorY }: Vector) => {
+    const transformedVertices = getVertices()
+      .translate(-anchorX, -anchorY)
+      .scale(scaleFactor)
+      .translate(anchorX, anchorY)
+
+    const { a, c } = transformedVertices;
+
+    _position.value.x = a.x;
+    _position.value.y = a.y;
+    _size.value.width = c.x - a.x;
+    _size.value.height = c.y - a.y;
+  }
+
+  const getVertices = () => {
+    const { x, y } = unref(_position);
+    const { width, height } = unref(_size);
+
+    const x1 = x;
+    const x2 = x + width;
+    const y1 = y;
+    const y2 = y + height;
+
+    return createVertices({
+      a: createVector(x1, y1),
+      b: createVector(x2, y1),
+      c: createVector(x2, y2),
+      d: createVector(x1, y2),
+    });
+  }
+
   const throwRenderNotImplemented = () => {
     throw new Error(`Render function not implemented for ${type}`); 
   };
@@ -72,5 +106,7 @@ export const createElement = (position: ElementPosition, size: ElementSize, type
     rotate,
     move,
     resize,
+    scale,
+    getVertices,
   }
 }

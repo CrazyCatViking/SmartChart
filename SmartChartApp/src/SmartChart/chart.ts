@@ -68,7 +68,9 @@ const createChart = (canvasState: CanvasState, hotKeyState: HotKeyState): Chart 
     ctx.fillStyle = "white";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    for (const element of _elements.value) {
+    const elementsToRender = _elements.value.filter((element) => element.type !== 'Group');
+
+    for (const element of elementsToRender) {
       await element.render(ctx);
     }
 

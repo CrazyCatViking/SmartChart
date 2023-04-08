@@ -4,7 +4,10 @@ export interface Vector {
 
   rotate: (angle: number, rotationCenter?: Vector) => Vector;
   translate: (dx: number, dy: number) => Vector;
+  scale: (scaleFactor: number) => Vector;
   getCenter: (vectorB: Vector) => Vector;
+  getSize: () => number;
+  getDistance: (vectorB: Vector) => number;
 };
 
 export const createVector = (x: number, y: number) => {
@@ -21,9 +24,14 @@ export const createVector = (x: number, y: number) => {
     return createVector(rotatedX, rotatedY);
   };
 
-  const translate = (dx: number, dy: number) => createVector(
+  const translate = (dx: number, dy: number): Vector => createVector(
     _x + dx,
     _y + dy,
+  );
+
+  const scale = (scaleFactor: number): Vector => createVector(
+    _x * scaleFactor,
+    _y * scaleFactor,
   );
 
   const getCenter = (vectorB: Vector): Vector => createVector(
@@ -31,12 +39,24 @@ export const createVector = (x: number, y: number) => {
     (_y + vectorB.y) / 2,
   );
 
+  const getSize = () => Math.sqrt(_x * _x + _y * _y);
+
+  const getDistance = (vectorB: Vector) => {
+    const dx = vectorB.x - _x;
+    const dy = vectorB.y - _y;
+
+    return Math.sqrt(dx * dx + dy * dy);
+  };
+
   return {
     get x() { return _x },
     get y() { return _y },
 
     rotate,
     translate,
+    scale,
     getCenter,
+    getSize,
+    getDistance,
   }
 }

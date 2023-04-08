@@ -1,16 +1,33 @@
-import { Ref, ref, provide, InjectionKey, ComputedRef, computed, watch } from "vue";
+import {
+  Ref,
+  ref,
+  unref,
+  provide,
+  InjectionKey,
+  ComputedRef,
+  computed,
+  watch,
+  shallowRef
+} from "vue";
 import { saveAs } from 'file-saver';
 import { Element } from "./elements/element";
 import { HotKeyState } from "./hotKeyState";
 import { CanvasState } from "./canvasState";
 import { ElementGroup, createGroup } from "./elements/elementGroup";
+import { createChartHistory } from "./chartHistory";
+import { cloneDeep } from "lodash";
+import { serializeChart } from "./utility/chartSerializer";
 
 interface Chart {
   elements: Readonly<Ref<Element[]>>;
   selectedElements: Readonly<Ref<string[]>>;
 
   addElement: (element: Element) => void;
-  removeElement: (id: string) => void; 
+  removeElement: (id: string) => void;
+
+  commitChanges: () => void;
+  undoChanges: () => void;
+  redoChanges: () => void;
 
   convertToImage: () => void;
 
@@ -30,28 +47,22 @@ export const useChart = (canvasState: CanvasState, hotKeyState: HotKeyState): Ch
 export const chartInjectionKey: InjectionKey<Chart> = Symbol('chart-injection-key');
 
 const createChart = (canvasState: CanvasState, hotKeyState: HotKeyState): Chart => {
-  const _elements: Ref<Element[]> = ref([]);
+  const _elements: Ref<Element[]> = shallowRef([]);
   const _selectedElements: Ref<string[]> = ref([]);
+
+  const {
+    commitChanges,
+    undoChanges,
+    redoChanges,
+
+    checkCanRedo,
+    checkCanUndo,
+  } = createChartHistory(_elements.value);
 
   const selectionGroupId = ref<string>();
 
-  watch(_selectedElements, (value) => {
-    if (selectionGroupId.value) {
-      removeElement(selectionGroupId.value);
-      selectionGroupId.value = undefined;
-    }
-
-    if (value.length <= 1) return;
-
-    const elements = _elements.value.filter((element) => value.includes(element.id));
-    const groupElement = createGroup(elements);
-    
-    selectionGroupId.value = groupElement.id;
-    addElement(groupElement);
-  }, { deep: true });
-
   const addElement = (element: Element) => {
-    _elements.value.push(element);
+    _elements.value = [ ..._elements.value, element ];
   };
 
   const removeElement = (id: string) => {
@@ -114,12 +125,45 @@ const createChart = (canvasState: CanvasState, hotKeyState: HotKeyState): Chart 
     _selectedElements.value = [];
   };
 
+  const _commitChanges = () => {
+    commitChanges(_elements.value);
+  };
+
+  const _undoChanges = () => {
+    if (!checkCanUndo()) return;
+    _elements.value = undoChanges();
+  };
+
+  const _redoChanges = () => {
+    if (!checkCanRedo()) return;
+    _elements.value = redoChanges();
+  };
+
+  watch(_selectedElements, (value) => {
+    if (selectionGroupId.value) {
+      removeElement(selectionGroupId.value);
+      selectionGroupId.value = undefined;
+    }
+
+    if (value.length <= 1) return;
+
+    const elements = _elements.value.filter((element) => value.includes(element.id));
+    const groupElement = createGroup(elements);
+
+    selectionGroupId.value = groupElement.id;
+    addElement(groupElement);
+  }, { deep: true });
+
   return {
     get elements() { return _elements; },
     get selectedElements() { return _selectedElements; },
 
     addElement,
     removeElement,
+
+    commitChanges: _commitChanges,
+    undoChanges: _undoChanges,
+    redoChanges: _redoChanges,
 
     convertToImage,
 

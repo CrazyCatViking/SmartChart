@@ -1,19 +1,23 @@
 import { createVector } from "../utility/vector";
 import { ElementPosition, ElementSize } from "../types";
-import { Element, createElement } from "./element";
+import { Element, ElementData, createElement } from "./element";
 
 export interface Image extends Element {
   url: string;
 }
 
-export const createImage = (position: ElementPosition, size: ElementSize, url: string): Image => {
-  const element = createElement(position, size, 'Image');
+export interface ImageData extends ElementData {
+  url: string;
+}
+
+export const createImage = (data: ImageData): Image => {
+  const element = createElement({ ...data, type: 'Image' });
 
   const render = async (ctx: CanvasRenderingContext2D) => {
     const { x, y, rotation } = element.position.value;
     const { width, height } = element.size.value;
 
-    const res = await fetch(url);
+    const res = await fetch(data.url);
     const blob = await res.blob();
 
     const image = new Image();
@@ -42,7 +46,7 @@ export const createImage = (position: ElementPosition, size: ElementSize, url: s
   return {
     ...element,
 
-    url,
+    url: data.url,
     render,
   };
 };

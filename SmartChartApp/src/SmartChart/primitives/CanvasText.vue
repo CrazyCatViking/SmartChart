@@ -3,14 +3,14 @@
     class="text"
     :style="textStyle"
     @click.stop="onTextClick"
-  >{{ internalElement.text }}</pre>
+  >{{ element.text.value }}</pre>
 
   <textarea
     v-if="isEditing"
     class="text-area"
     :style="textStyle"
     ref="textAreaRef"
-    v-model="internalElement.text"
+    v-model="element.text.value"
     @mousedown.stop
   />
 
@@ -23,11 +23,11 @@
 <script setup lang="ts">
 import { PropType, StyleValue, computed, ref } from 'vue';
 import { GlobalEvents } from 'vue-global-events';
-import { Element, TextElement } from '../elements';
+import { TextElement } from '../elements';
 
 const props = defineProps({
   element: {
-    type: Object as PropType<Element>,
+    type: Object as PropType<TextElement>,
     required: true,
   },
 });
@@ -35,7 +35,6 @@ const props = defineProps({
 const textAreaRef = ref();
 
 const isEditing = ref(false);
-const internalElement= ref(props.element as TextElement);
 
 const clickPrimed = ref(false);
 
@@ -45,7 +44,7 @@ const textStyle = computed<StyleValue>(() => {
     fontSize,
     fontWeight,
     lineHeight,
-  } = internalElement.value;
+  } = props.element;
 
   return {
     'font-family': font,

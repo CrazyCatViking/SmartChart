@@ -1,4 +1,4 @@
-import { ref, computed, provide, InjectionKey, Ref, ComputedRef, inject } from "vue";
+import { watch, computed, provide, InjectionKey, Ref, ComputedRef, inject } from "vue";
 import { ElementPosition, ElementSize, RectBaseCoordinates, RectVertices } from "../types";
 import { Vector, createVector } from "../utility/vector";
 import { Element } from "../elements";
@@ -28,9 +28,8 @@ const createRect = (element: Element): Rect => {
   // nested refs. Refactoring is needed to remove some of the refs
   const { ctrlPressed } = inject(hotKeyStateInjectionKey)!;
 
-  const internalElement = ref(element);
-  const rectPosition = ref(internalElement.value.position);
-  const rectSize = ref(internalElement.value.size);
+  const rectPosition = element.position;
+  const rectSize = element.size;
 
   const rectBaseCoordinates = computed<RectBaseCoordinates>(() => {
     const { x, y } = rectPosition.value;
@@ -66,11 +65,11 @@ const createRect = (element: Element): Rect => {
 
     const mousePosition = createVector(pageX, pageY);
 
-    internalElement.value.rotate(mousePosition, rectCenter);
+    element.rotate(mousePosition, rectCenter);
   };
 
   const moveRect = (deltaX: number, deltaY: number) => {
-    internalElement.value.move(deltaX, deltaY);
+    element.move(deltaX, deltaY);
   };
 
   const resizeRect = (mousePosition: Vector, anchorPosition: Vector) => {

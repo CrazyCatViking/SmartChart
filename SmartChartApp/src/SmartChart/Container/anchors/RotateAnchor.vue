@@ -15,8 +15,10 @@
 import { inject, ref } from 'vue';
 import { GlobalEvents } from 'vue-global-events';
 import { rectInjectionToken } from '../useRect';
+import { chartInjectionKey } from '../../chart';
 
 const { rotateRect } = inject(rectInjectionToken)!;
+const { commitChanges } = inject(chartInjectionKey)!;
 
 const isRotating = ref(false);
 const mousePosition = ref({ x: 0, y: 0 });
@@ -37,6 +39,8 @@ const onRotateEnd = (e: MouseEvent) => {
     x: 0,
     y: 0,
   };
+
+  commitChanges();
 };
 
 const onRotate = (e: MouseEvent) => {

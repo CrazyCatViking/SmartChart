@@ -1,13 +1,17 @@
-import { ElementPosition, ElementSize } from "../types";
-import { Element, createElement } from "./element";
+import { Element, ElementData, createElement } from "./element";
 
 export interface Ellipse extends Element {
   color: string;
   strokeWidth: number;
 }
 
-export const createEllipse = (position: ElementPosition, size: ElementSize): Ellipse => {
-  const element = createElement(position, size, 'Ellipse');
+export interface EllipseData extends ElementData {
+  color?: string;
+  strokeWidth?: number;
+} 
+
+export const createEllipse = (data: EllipseData): Ellipse => {
+  const element = createElement({ ...data, type: 'Ellipse' });
 
   const _strokeWidth = 3;
 

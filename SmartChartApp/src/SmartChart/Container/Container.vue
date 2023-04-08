@@ -2,7 +2,7 @@
   <div
     class="container" 
     :style="style"
-    :tabindex="rectPosition.z"
+    :tabindex="element.position.value.z"
     draggable="false"
     @mousedown.stop="onSelectElement"
     @click.stop.prevent
@@ -14,7 +14,7 @@
       draggable="false"
       @mousedown="onDragStart"
     >
-      <slot :containerSize="rectSize" :containerPosition="rectPosition"></slot>
+      <slot :containerSize="element.size" :containerPosition="element.position"></slot>
     </div>
   </div>
 
@@ -26,7 +26,7 @@
 </template>
 
 <script setup lang="ts">
-import { PropType, computed, inject, ref, toRef } from 'vue';
+import { PropType, computed, inject, ref } from 'vue';
 import { GlobalEvents } from 'vue-global-events';
 import { useRect } from './useRect';
 import ContainerTransform from './ContainerTransform.vue';
@@ -40,18 +40,14 @@ const props = defineProps({
   },
 });
 
-const { selectElements: selectElement, getIsSelected } = inject(chartInjectionKey)!;
+const { selectElements: selectElement, getIsSelected, commitChanges } = inject(chartInjectionKey)!;
 const isSelected = getIsSelected(props.element.id);
 
 const isDragging = ref(false);
 
 const inititalPosition = ref({ x: 0, y: 0 });
 
-const {
-  rectPosition,
-  rectSize,
-  moveRect,
-} = useRect(props.element);
+const { moveRect } = useRect(props.element);
 
 const onSelectElement = () => {
   const id = props.element.id;
@@ -74,6 +70,8 @@ const onDragEnd = (e: MouseEvent) => {
     x: 0,
     y: 0,
   };
+
+  commitChanges();
 };
 
 const onDrag = (e: MouseEvent) => {
@@ -88,11 +86,16 @@ const onDrag = (e: MouseEvent) => {
   moveRect(deltaX, deltaY);
 };
 
-const style = computed(() => ({
-  transform: `translate(${rectPosition.value.x}px, ${rectPosition.value.y}px) rotate(${rectPosition.value.rotation}rad)`,
-  width: `${rectSize.value.width}px`,
-  height: `${rectSize.value.height}px`,
-}));
+const style = computed(() => {
+  const { x, y, rotation } = props.element.position.value;
+  const { width, height } = props.element.size.value;
+
+  return {
+    transform: `translate(${x}px, ${y}px) rotate(${rotation}rad)`,
+    width: `${width}px`,
+    height: `${height}px`,
+  }
+});
 </script>
 
 <style lang="scss">

@@ -1,17 +1,23 @@
-import { Ref, ref } from "vue";
+import { Ref, unref, ref } from "vue";
 import { ElementPosition, ElementSize } from "../types";
 import { v4 as uuidv4 } from 'uuid';
 import { Vector, createVector } from "../utility/vector";
 import { Vertices, createVertices } from "../utility/vertices";
 
-type ElementType = 'Image' | 'Rectangle' | 'Ellipse' | 'Text' | 'Group';
+export type ElementType = 'Image' | 'Rectangle' | 'Ellipse' | 'Text' | 'Group';
+
+export interface ElementData {
+  position: ElementPosition;
+  size: ElementSize;
+  type?: ElementType;
+  id?: string;
+};
 
 export interface Element {
   id: Readonly<string>;
-  type: Readonly<ElementType>;
+  type?: Readonly<ElementType>;
   position: Ref<ElementPosition>;
   size: Ref<ElementSize>;
-  isSelected: Ref<boolean>;
 
   render: (ctx: CanvasRenderingContext2D) => Promise<void> | void;
 
@@ -22,12 +28,12 @@ export interface Element {
   getVertices: () => Vertices;
 }
 
-export const createElement = (position: ElementPosition, size: ElementSize, type: ElementType): Element => {
-  const _id = uuidv4();
+export const createElement = ({ position, size, type, id }: ElementData): Element => {
+  const _id = id ?? uuidv4();
   const _type = type;
+
   const _position = ref(position);
   const _size = ref(size);
-  const _isSelected = ref(false);
 
   const rotate = ({ x, y }: Vector, { x: cx, y: cy }: Vector) => {
     const rotation = Math.atan2(x - cx, - (y - cy));
@@ -100,7 +106,6 @@ export const createElement = (position: ElementPosition, size: ElementSize, type
 
     position: _position,
     size: _size,
-    isSelected: _isSelected,
 
     render: throwRenderNotImplemented,
     rotate,
@@ -109,4 +114,4 @@ export const createElement = (position: ElementPosition, size: ElementSize, type
     scale,
     getVertices,
   }
-}
+};

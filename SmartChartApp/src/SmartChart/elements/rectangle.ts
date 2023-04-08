@@ -1,13 +1,19 @@
+import { Ref } from "vue";
 import { ElementPosition, ElementSize } from "../types";
-import { Element, createElement } from "./element";
+import { Element, ElementData, createElement } from "./element";
 
 export interface Rectangle extends Element {
   color: string;
   strokeWidth: number;
 }
 
-export const createRect = (position: ElementPosition, size: ElementSize): Rectangle => {
-  const element = createElement(position, size, 'Rectangle');
+export interface RectangleData extends ElementData {
+  color?: string;
+  strokeWidth?: number;
+}
+
+export const createRect = (data: RectangleData): Rectangle => {
+  const element = createElement({ ...data, type: 'Rectangle' });
 
   const _strokeWidth = 3;
 

@@ -13,25 +13,23 @@
 </template>
 
 <script setup lang="ts">
-import { PropType, computed, ref } from 'vue';
-import { Element, Ellipse } from '../elements/';
+import { PropType, computed } from 'vue';
+import { Ellipse } from '../elements/';
 
 const props = defineProps({
   element: {
-    type: Object as PropType<Element>,
+    type: Object as PropType<Ellipse>,
     required: true,
   },
 });
 
-const internalElement = ref(props.element as Ellipse);
-
-const cx = computed(() => internalElement.value.size.width / 2);
-const cy = computed(() => internalElement.value.size.height / 2);
-const rx = computed(() => internalElement.value.size.width / 2 - 3);
-const ry = computed(() => internalElement.value.size.height / 2 - 3);
+const cx = computed(() => props.element.size.value.width / 2);
+const cy = computed(() => props.element.size.value.height / 2);
+const rx = computed(() => props.element.size.value.width / 2 - 3);
+const ry = computed(() => props.element.size.value.height / 2 - 3);
 
 const style = computed(() => ({
-  'stroke-width': internalElement.value.strokeWidth,
+  'stroke-width': props.element.strokeWidth,
 }));
 </script>
 

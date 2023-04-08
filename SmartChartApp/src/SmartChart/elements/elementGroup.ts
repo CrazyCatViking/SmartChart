@@ -1,8 +1,7 @@
-import { unref } from "vue";
-import { Vector, createVector } from "../utility/vector";
+import { unref, ref } from "vue";
+import { Vector } from "../utility/vector";
 import { ElementPosition, ElementSize, RectVertices } from "../types";
 import { Element, createElement } from "./element";
-import { createVertices } from "../utility/vertices";
 
 export interface ElementGroup extends Element {
   children: Readonly<Element[]>;
@@ -13,7 +12,7 @@ export const createGroup = (children: Element[]): ElementGroup => {
 
   const { position, size } = getGroupPositionAndSize(children);
   
-  const element = createElement(position, size, 'Group');
+  const element = createElement({ position, size, type: 'Group' });
   const { position: _position, size: _size } = element;
 
   const rotate = (mousePosition: Vector, rotationCenter: Vector) => {

@@ -51,10 +51,11 @@ import { chartInjectionKey } from '../chart';
 import { Element, createEllipse, createImage, createRect, createText } from '../elements';
 import { ElementPosition, ElementSize } from '../types';
 import { canvasStateInjectionKey } from '../canvasState';
+import { Vector, createVector } from '../utility/vector';
 
 const imageUrl = "https://i.guim.co.uk/img/media/26392d05302e02f7bf4eb143bb84c8097d09144b/446_167_3683_2210/master/3683.jpg?width=620&quality=85&dpr=1&s=none";
 
-const { addElement, convertToImage, selectElements: selectElement } = inject(chartInjectionKey)!;
+const { addElement, convertToImage, selectElements: selectElement, commitChanges } = inject(chartInjectionKey)!;
 const { startAddElement, endAddElement } = inject(canvasStateInjectionKey)!;
 
 const isCreatingEllipse = ref(false);
@@ -82,35 +83,34 @@ const onClickImage = () => {
   startAddElement();
 }
 
-const initialPosition = ref({ x: 0, y: 0 });
+const anchorPosition = ref<Vector>();
 let element: Element | undefined;
 
 const onMouseDown = (e: MouseEvent) => {
   const { clientX, clientY } = e;
 
-  initialPosition.value.x = clientX;
-  initialPosition.value.y = clientY;
+  anchorPosition.value = createVector(clientX, clientY);
 
   const position: ElementPosition = { x: clientX, y: clientY, z: 0, rotation: 0 };
   const size: ElementSize = { height: 0, width: 0 };
 
   if (isCreatingEllipse.value) {
-    const ellipse = createEllipse(position, size);
+    const ellipse = createEllipse({ position, size });
 
     element = ellipse;
     addElement(element);
   } else if (isCreatingRectangle.value) {
-    const rectangle = createRect(position, size);
+    const rectangle = createRect({ position, size });
 
     element = rectangle;
     addElement(element);
   } else if (isCreatingText.value) {
-    const text = createText(position, size, 'ipsum lorum');
+    const text = createText({ position, size, text: 'ipsum lorum' });
 
     element = text;
     addElement(element);
   } else if (isCreatingImage.value) {
-    const image = createImage(position, size, imageUrl);
+    const image = createImage({ position, size, url: imageUrl });
 
     element = image;
     addElement(element);
@@ -125,18 +125,10 @@ const onMouseMove = (e: MouseEvent) => {
   if (!element) return;
 
   const { clientX, clientY } = e;
-  const { x, y } = initialPosition.value;
 
-  const width = Math.abs(clientX - x);
-  const height = Math.abs(clientY - y);
+  const mousePosition = createVector(clientX, clientY);
 
-  const newX = x < clientX ? x : clientX;
-  const newY = y < clientY ? y : clientY;
-
-  element.position.value.x = newX;
-  element.position.value.y = newY;
-  element.size.value.width = width;
-  element.size.value.height = height;
+  element.resize(mousePosition, anchorPosition.value!);
 };
 
 const onMouseUp = (e: MouseEvent) => {
@@ -148,6 +140,7 @@ const onMouseUp = (e: MouseEvent) => {
   element = undefined;
 
   endAddElement();
+  commitChanges();
 };
 </script>
 

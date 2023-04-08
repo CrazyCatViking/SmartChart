@@ -9,8 +9,8 @@
     draggable="false"
   >
     <CanvasElement
-      v-for="element in elements"
-      :key="element.id"
+      v-for="(element) in elements"
+      :key="uuidv4()"
       :element="element"
     />
   </div>
@@ -25,12 +25,16 @@
     @keydown.control.stop="() => ctrlPressed = true"
     @keyup.control.stop="() => ctrlPressed = false"
     @keydown.delete.stop="onDelete"
+
+    @keydown.ctrl.z.exact="undoChanges"
+    @keydown.ctrl.shift.z="redoChanges"
   />
 </template>
 
 <script setup lang="ts">
 import { inject } from 'vue';
 import { GlobalEvents } from 'vue-global-events';
+import { v4 as uuidv4 } from 'uuid';
 import CanvasElement from './CanvasElement.vue';
 import { chartInjectionKey } from './chart';
 import { hotKeyStateInjectionKey } from './hotKeyState';
@@ -39,7 +43,7 @@ import DragSelect from './DragSelect/DragSelect.vue';
 import { useDragSelect } from './DragSelect/useDragSelect';
 import { createVector } from './utility/vector';
 
-const { elements, deleteSelected } = inject(chartInjectionKey)!;
+const { elements, deleteSelected, undoChanges, redoChanges } = inject(chartInjectionKey)!;
 const { ctrlPressed } = inject(hotKeyStateInjectionKey)!;
 const { isAddingElement } = inject(canvasStateInjectionKey)!;
 

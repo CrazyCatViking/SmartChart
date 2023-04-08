@@ -4,8 +4,8 @@
     :style="style"
   >
     <rect
-      :width="size.width"
-      :height="size.height"
+      :width="element.size.value.width"
+      :height="element.size.value.height"
     />
   </svg>
 </template>
@@ -16,15 +16,13 @@ import { Element, Rectangle } from '../elements/';
 
 const props = defineProps({
   element: {
-    type: Object as PropType<Element>,
+    type: Object as PropType<Rectangle>,
     required: true,
   },
 });
 
-const { size, strokeWidth } = props.element as Rectangle;
-
 const style = computed(() => ({
-  'stroke-width': strokeWidth,
+  'stroke-width': props.element.strokeWidth,
 }));
 </script>
 

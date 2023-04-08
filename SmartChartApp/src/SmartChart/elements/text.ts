@@ -1,7 +1,7 @@
 import { Ref, ref } from "vue";
 import { createVector } from "../utility/vector";
 import { ElementPosition, ElementSize } from "../types";
-import { Element, createElement } from "./element";
+import { Element, ElementData, createElement } from "./element";
 
 export interface TextElement extends Element {
   color: string;
@@ -12,10 +12,14 @@ export interface TextElement extends Element {
   lineHeight: number;
 }
 
-export const createText = (position: ElementPosition, size: ElementSize, text: string): TextElement => {
-  const element = createElement(position, size, 'Text');
+export interface TextData extends ElementData {
+  text: string;
+}
 
-  const _text = ref(text);
+export const createText = (data: TextData): TextElement => {
+  const element = createElement({ ...data, type: 'Text' });
+
+  const _text = ref(data.text);
   const _font = 'Times New Roman';
   const _fontSize = 16;
   const _fontWeight = 200;

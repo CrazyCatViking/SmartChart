@@ -19,7 +19,7 @@ interface Chart {
   elements: Readonly<Ref<Element[]>>;
   selectedElements: Readonly<Ref<string[]>>;
 
-  addElement: (element: Element) => void;
+  addElements: (...elements: Element[]) => void;
   removeElement: (id: string) => void;
 
   commitChanges: () => void;
@@ -58,9 +58,9 @@ const createChart = (canvasState: CanvasState, hotKeyState: HotKeyState): Chart 
 
   const selectionGroupId = ref<string>();
 
-  const addElement = (element: Element) => {
-    _elements.value = [ ..._elements.value, element ];
-  };
+  const addElements = (...elements: Element[]) => {
+    _elements.value = [ ..._elements.value, ...elements ];
+  }
 
   const removeElement = (id: string) => {
     _elements.value = _elements.value.filter((element) => element.id !== id);
@@ -148,14 +148,14 @@ const createChart = (canvasState: CanvasState, hotKeyState: HotKeyState): Chart 
     const groupElement = createGroup(elements);
 
     selectionGroupId.value = groupElement.id;
-    addElement(groupElement);
+    addElements(groupElement);
   }, { deep: true });
 
   return {
     get elements() { return _elements; },
     get selectedElements() { return _selectedElements; },
 
-    addElement,
+    addElements,
     removeElement,
 
     commitChanges: _commitChanges,

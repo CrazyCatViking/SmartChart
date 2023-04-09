@@ -28,6 +28,10 @@
 
     @keydown.ctrl.z.exact="undoChanges"
     @keydown.ctrl.shift.z="redoChanges"
+
+    @keydown.ctrl.c.exact="copySelected"
+    @keydown.ctrl.x.exact="cutSelected"
+    @keydown.ctrl.v.exact="paste"
   />
 </template>
 
@@ -42,6 +46,7 @@ import { canvasStateInjectionKey } from './canvasState';
 import DragSelect from './DragSelect/DragSelect.vue';
 import { useDragSelect } from './DragSelect/useDragSelect';
 import { createVector } from './utility/vector';
+import { useCopyPaste } from './copyPaste';
 
 const {
   elements,
@@ -53,7 +58,8 @@ const {
 const { ctrlPressed } = inject(hotKeyStateInjectionKey)!;
 const { isAddingElement } = inject(canvasStateInjectionKey)!;
 
-const { isSelecting, beginSelection } = useDragSelect()!;
+const { isSelecting, beginSelection } = useDragSelect();
+const { copySelected, cutSelected, paste } = useCopyPaste();
 
 const onDelete = (e: KeyboardEvent) => {
   if (e.key === 'Delete') {

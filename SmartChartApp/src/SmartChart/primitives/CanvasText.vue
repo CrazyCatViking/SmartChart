@@ -12,6 +12,9 @@
     ref="textAreaRef"
     v-model="element.text.value"
     @mousedown.stop
+    @keydown.ctrl.c.exact.stop
+    @keydown.ctrl.v.exact.stop
+    @keydown.ctrl.x.exact.stop
   />
 
   <GlobalEvents

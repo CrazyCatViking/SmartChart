@@ -29,6 +29,7 @@
     </button>
 
     <button
+      v-show="showConnectButton"
       class="toolbar-button"
       @click="onClickConnectSelected"
     >
@@ -52,7 +53,7 @@
 </template>
 
 <script setup lang="ts">
-import { inject, ref } from 'vue';
+import { computed, inject, ref } from 'vue';
 import { GlobalEvents } from 'vue-global-events';
 import { chartInjectionKey } from '../chart';
 import { Element, createConnector, createEllipse, createImage, createRect, createText } from '../elements';
@@ -114,6 +115,8 @@ const onClickConnectSelected = () => {
   addElements(connector);
   commitChanges();
 };
+
+const showConnectButton = computed(() => selectedElements.value.length === 2);
 
 const anchorPosition = ref<Vector>();
 let element: Element | undefined;

@@ -30,6 +30,13 @@
 
     <button
       class="toolbar-button"
+      @click="onClickConnectSelected"
+    >
+      <span>{{ '+ Connect' }}</span>
+    </button>
+
+    <button
+      class="toolbar-button"
       @click="convertToImage"
     >
       <span>{{ 'Download' }}</span>
@@ -48,14 +55,22 @@
 import { inject, ref } from 'vue';
 import { GlobalEvents } from 'vue-global-events';
 import { chartInjectionKey } from '../chart';
-import { Element, createEllipse, createImage, createRect, createText } from '../elements';
+import { Element, createConnector, createEllipse, createImage, createRect, createText } from '../elements';
 import { ElementPosition, ElementSize } from '../types';
 import { canvasStateInjectionKey } from '../canvasState';
 import { Vector, createVector } from '../utility/vector';
 
 const imageUrl = "https://i.guim.co.uk/img/media/26392d05302e02f7bf4eb143bb84c8097d09144b/446_167_3683_2210/master/3683.jpg?width=620&quality=85&dpr=1&s=none";
 
-const { addElements, convertToImage, selectElements: selectElement, commitChanges } = inject(chartInjectionKey)!;
+const {
+  addElements,
+  convertToImage,
+  selectElements: selectElement,
+  commitChanges,
+  selectedElements,
+  elements,
+} = inject(chartInjectionKey)!;
+
 const { startAddElement, endAddElement } = inject(canvasStateInjectionKey)!;
 
 const isCreatingEllipse = ref(false);
@@ -66,22 +81,39 @@ const isCreatingImage = ref(false);
 const onClickEllipse = () => {
   isCreatingEllipse.value = true
   startAddElement();
-}
+};
 
 const onClickRectangle = () => {
   isCreatingRectangle.value = true
   startAddElement();
-}
+};
 
 const onClickText = () => {
   isCreatingText.value = true
   startAddElement();
-}
+};
 
 const onClickImage = () => {
   isCreatingImage.value = true
   startAddElement();
-}
+};
+
+const onClickConnectSelected = () => {
+  const elementIds = selectedElements.value;
+  const els = elements.value.filter((el) => elementIds.includes(el.id));
+
+  if (elementIds.length !== 2) return;
+
+  const connector = createConnector({
+    position: { x: 0, y: 0, z: 0, rotation: 0 },
+    size: { width: 0, height: 0 },
+    originElement: els[0],
+    targetElement: els[1],
+  });
+
+  addElements(connector);
+  commitChanges();
+};
 
 const anchorPosition = ref<Vector>();
 let element: Element | undefined;

@@ -7,7 +7,10 @@
     @mousedown.stop="onSelectElement"
     @click.stop.prevent
   >
-    <ContainerTransform v-show="isSelected" draggable="false" />
+    <ContainerTransform
+      v-show="isSelected"
+      draggable="false"
+    />
 
     <div
       class="container-content"

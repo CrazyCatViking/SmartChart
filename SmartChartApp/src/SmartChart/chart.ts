@@ -144,7 +144,9 @@ const createChart = (canvasState: CanvasState, hotKeyState: HotKeyState): Chart 
 
     if (value.length <= 1) return;
 
-    const elements = _elements.value.filter((element) => value.includes(element.id));
+    const elements = _elements.value
+      .filter((element) => value.includes(element.id) && element.type !== 'Connector');
+
     const groupElement = createGroup(elements);
 
     selectionGroupId.value = groupElement.id;

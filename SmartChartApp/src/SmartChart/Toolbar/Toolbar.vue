@@ -212,6 +212,8 @@ const onMouseUp = (e: MouseEvent) => {
   border: none;
   padding: 0;
 
+  color: black;
+
   &:focus {
     outline: none;
   }

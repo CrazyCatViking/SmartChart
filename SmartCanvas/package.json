@@ -1,6 +1,6 @@
 {
   "name": "@crazycatviking/smartcanvas",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "author": {
     "name": "Kristoffer Solvang-Jansen",
     "email": "krissjansen@gmail.com"
@@ -24,7 +24,8 @@
   "scripts": {
     "build": "rimraf dist && yarn build:vite && yarn build:types",
     "build:types": "vue-tsc --emitDeclarationOnly",
-    "build:vite": "vite build"
+    "build:vite": "vite build",
+    "prepublish": "yarn build"
   },
   "peerDependencies": {
     "lodash": "^4.17.21",

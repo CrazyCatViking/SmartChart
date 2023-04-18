@@ -7,10 +7,10 @@
   resolved "https://registry.yarnpkg.com/@babel/parser/-/parser-7.21.4.tgz#94003fdfc520bbe2875d4ae557b43ddb6d880f17"
   integrity sha512-alVJj7k7zIxqBZ7BTRhz0IqJFxW1VJbm6N8JbcYhQ186df9ZBPbZBmWSqAMXwHGsCJdYks7z/voa3ibiS5bCIw==
 
-"@crazycatviking/smartcanvas@^0.0.1":
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/@crazycatviking/smartcanvas/-/smartcanvas-0.0.1.tgz#5ed4d264fccecae797c19e642c4699f5fe47cd06"
-  integrity sha512-gOhWWeQzUTx2L6d+U/6pwuk9/R1uQpaSBLqxQQmo4y+n4NTdDqN8e49oga2amAm9deUudMOgPbhRz6l63q/oZA==
+"@crazycatviking/smartcanvas@^0.0.4":
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/@crazycatviking/smartcanvas/-/smartcanvas-0.0.4.tgz#82c3f850cf54d685450585d6b7aa3f36a437d161"
+  integrity sha512-3iKf3zrfLzFSvWBGGohsTjEk3Zho+luVd7FcNme6DqQhyrTFKGT4CqrEIZIm9kv9O/JZPA1p/XZIU5XamMf1Lg==
 
 "@esbuild/android-arm64@0.17.17":
   version "0.17.17"

@@ -206,7 +206,7 @@
 
 "@vue/compiler-sfc@3.2.47", "@vue/compiler-sfc@^3.2.47":
   version "3.2.47"
-  resolved "https://registry.npmjs.org/@vue/compiler-sfc/-/compiler-sfc-3.2.47.tgz"
+  resolved "https://registry.yarnpkg.com/@vue/compiler-sfc/-/compiler-sfc-3.2.47.tgz#1bdc36f6cdc1643f72e2c397eb1a398f5004ad3d"
   integrity sha512-rog05W+2IFfxjMcFw10tM9+f7i/+FFpZJJ5XHX72NP9eC2uRD+42M3pYcQqDXVYoj74kHMSEdQ/WmCjt8JFksQ==
   dependencies:
     "@babel/parser" "^7.16.4"
@@ -241,14 +241,14 @@
 
 "@vue/reactivity@3.2.47", "@vue/reactivity@^3.2.47":
   version "3.2.47"
-  resolved "https://registry.npmjs.org/@vue/reactivity/-/reactivity-3.2.47.tgz"
+  resolved "https://registry.yarnpkg.com/@vue/reactivity/-/reactivity-3.2.47.tgz#1d6399074eadfc3ed35c727e2fd707d6881140b6"
   integrity sha512-7khqQ/75oyyg+N/e+iwV6lpy1f5wq759NdlS1fpAhFXa8VeAIKGgk2E/C4VF59lx5b+Ezs5fpp/5WsRYXQiKxQ==
   dependencies:
     "@vue/shared" "3.2.47"
 
 "@vue/runtime-core@3.2.47":
   version "3.2.47"
-  resolved "https://registry.npmjs.org/@vue/runtime-core/-/runtime-core-3.2.47.tgz"
+  resolved "https://registry.yarnpkg.com/@vue/runtime-core/-/runtime-core-3.2.47.tgz#406ebade3d5551c00fc6409bbc1eeb10f32e121d"
   integrity sha512-RZxbLQIRB/K0ev0K9FXhNbBzT32H9iRtYbaXb0ZIz2usLms/D55dJR2t6cIEUn6vyhS3ALNvNthI+Q95C+NOpA==
   dependencies:
     "@vue/reactivity" "3.2.47"
@@ -256,7 +256,7 @@
 
 "@vue/runtime-dom@3.2.47":
   version "3.2.47"
-  resolved "https://registry.npmjs.org/@vue/runtime-dom/-/runtime-dom-3.2.47.tgz"
+  resolved "https://registry.yarnpkg.com/@vue/runtime-dom/-/runtime-dom-3.2.47.tgz#93e760eeaeab84dedfb7c3eaf3ed58d776299382"
   integrity sha512-ArXrFTjS6TsDei4qwNvgrdmHtD930KgSKGhS5M+j8QxXrDJYLqYw4RRcDy1bz1m1wMmb6j+zGLifdVHtkXA7gA==
   dependencies:
     "@vue/runtime-core" "3.2.47"
@@ -265,7 +265,7 @@
 
 "@vue/server-renderer@3.2.47":
   version "3.2.47"
-  resolved "https://registry.npmjs.org/@vue/server-renderer/-/server-renderer-3.2.47.tgz"
+  resolved "https://registry.yarnpkg.com/@vue/server-renderer/-/server-renderer-3.2.47.tgz#8aa1d1871fc4eb5a7851aa7f741f8f700e6de3c0"
   integrity sha512-dN9gc1i8EvmP9RCzvneONXsKfBRgqFeFZLurmHOveL7oH6HiFXJw5OGu294n1nHc/HMgTy6LulU/tv5/A7f/LA==
   dependencies:
     "@vue/compiler-ssr" "3.2.47"
@@ -367,7 +367,7 @@ cross-spawn@^7.0.0:
 
 csstype@^2.6.8:
   version "2.6.21"
-  resolved "https://registry.npmjs.org/csstype/-/csstype-2.6.21.tgz"
+  resolved "https://registry.yarnpkg.com/csstype/-/csstype-2.6.21.tgz#2efb85b7cc55c80017c66a5ad7cbd931fda3a90e"
   integrity sha512-Z1PhmomIfypOpoMjRQB70jfvy/wxT50qW08YXO5lMIJkrdq4yOTR+AW7FqutScmB9NkLwxo+jU+kZLbofZZq/w==
 
 de-indent@^1.0.2:
@@ -531,7 +531,7 @@ jackspeak@^2.0.3:
 
 lodash@^4.17.21:
   version "4.17.21"
-  resolved "https://registry.npmjs.org/lodash/-/lodash-4.17.21.tgz"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.21.tgz#679591c564c3bffaae8454cf0b3df370c3d6911c"
   integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==
 
 lru-cache@^9.0.0:
@@ -723,7 +723,7 @@ typescript@^4.9.3:
 
 uuid@^9.0.0:
   version "9.0.0"
-  resolved "https://registry.npmjs.org/uuid/-/uuid-9.0.0.tgz"
+  resolved "https://registry.yarnpkg.com/uuid/-/uuid-9.0.0.tgz#592f550650024a38ceb0c562f2f6aa435761efb5"
   integrity sha512-MXcSTerfPa4uqyzStbRoTgt5XIe3x5+42+q1sDuy3R5MDk66URdLMOZe5aPX/SQd+kuYAh0FdP/pO28IkQyTeg==
 
 vite@^4.2.0:
@@ -740,7 +740,7 @@ vite@^4.2.0:
 
 vue-global-events@^2.1.1:
   version "2.1.1"
-  resolved "https://registry.npmjs.org/vue-global-events/-/vue-global-events-2.1.1.tgz"
+  resolved "https://registry.yarnpkg.com/vue-global-events/-/vue-global-events-2.1.1.tgz#348a2ec4dfc06b58fc8ed46f3dbe86642bf1da50"
   integrity sha512-iYgBmtbj/yLPADpB86p7MMjMEsiR/G/sYMbl9F85irjVBK7Q1TdqLRR10IfnZ6llNVrH/u91lGvNbE6s7u729Q==
 
 vue-template-compiler@^2.7.14:
@@ -761,7 +761,7 @@ vue-tsc@^1.2.0:
 
 vue@^3.2.47:
   version "3.2.47"
-  resolved "https://registry.npmjs.org/vue/-/vue-3.2.47.tgz"
+  resolved "https://registry.yarnpkg.com/vue/-/vue-3.2.47.tgz#3eb736cbc606fc87038dbba6a154707c8a34cff0"
   integrity sha512-60188y/9Dc9WVrAZeUVSDxRQOZ+z+y5nO2ts9jWXSTkMvayiWxCWOWtBQoYjLeccfXkiiPZWAHcV+WTPhkqJHQ==
   dependencies:
     "@vue/compiler-dom" "3.2.47"

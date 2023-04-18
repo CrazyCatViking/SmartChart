@@ -55,11 +55,11 @@
 <script setup lang="ts">
 import { computed, inject, ref } from 'vue';
 import { GlobalEvents } from 'vue-global-events';
-import { chartInjectionKey } from '../chart';
-import { Element, createConnector, createEllipse, createImage, createRect, createText } from '../elements';
-import { ElementPosition, ElementSize } from '../types';
-import { canvasStateInjectionKey } from '../canvasState';
-import { Vector, createVector } from '../utility/vector';
+import { chartInjectionKey } from '../SmartChart/chart';
+import { Element, createConnector, createEllipse, createImage, createRect, createText } from '../SmartChart/elements';
+import { ElementPosition, ElementSize } from '../SmartChart/types';
+import { canvasStateInjectionKey } from '../SmartChart/canvasState';
+import { Vector, createVector } from '../SmartChart/utility/vector';
 
 const imageUrl = "https://i.guim.co.uk/img/media/26392d05302e02f7bf4eb143bb84c8097d09144b/446_167_3683_2210/master/3683.jpg?width=620&quality=85&dpr=1&s=none";
 

@@ -3,7 +3,7 @@
 </template>
 
 <script setup lang="ts">
-import SmartChart from './SmartChart/SmartChart.vue';
+import SmartChart from './SmartChart.vue';
 </script>
 
 <style scoped>

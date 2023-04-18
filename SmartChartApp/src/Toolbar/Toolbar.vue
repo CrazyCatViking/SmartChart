@@ -55,11 +55,11 @@
 <script setup lang="ts">
 import { computed, inject, ref } from 'vue';
 import { GlobalEvents } from 'vue-global-events';
-import { chartInjectionKey } from 'smartcanvas';
-import { Element, createConnector, createEllipse, createImage, createRect, createText } from 'smartcanvas';
-import { ElementPosition, ElementSize } from 'smartcanvas';
-import { canvasStateInjectionKey } from 'smartcanvas';
-import { Vector, createVector } from 'smartcanvas';
+import { chartInjectionKey } from '@crazycatviking/smartcanvas';
+import { Element, createConnector, createEllipse, createImage, createRect, createText } from '@crazycatviking/smartcanvas';
+import { ElementPosition, ElementSize } from '@crazycatviking/smartcanvas';
+import { canvasStateInjectionKey } from '@crazycatviking/smartcanvas';
+import { Vector, createVector } from '@crazycatviking/smartcanvas';
 
 const imageUrl = "https://i.guim.co.uk/img/media/26392d05302e02f7bf4eb143bb84c8097d09144b/446_167_3683_2210/master/3683.jpg?width=620&quality=85&dpr=1&s=none";
 

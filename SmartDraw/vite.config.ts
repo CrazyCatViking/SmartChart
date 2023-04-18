@@ -11,6 +11,17 @@ export default defineConfig({
       name: 'SmartDraw',
       entry: resolve(__dirname, 'src/index.ts'),
       fileName: 'index',
-    }
+    },
+    rollupOptions: {
+      external: [
+        'vue',
+      ],
+      output: {
+        exports: 'named',
+        globals: {
+          vue: 'Vue',
+        },
+      },
+    },
   }
 })

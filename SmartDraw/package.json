@@ -1,6 +1,22 @@
 {
   "name": "smartcanvas",
   "version": "0.0.1",
+  "author": {
+    "name": "Kristoffer Solvang-Jansen",
+    "email": "krissjansen@gmail.com"
+  },
+  "homepage": "https://github.com/CrazyCatViking/SmartChart",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/CrazyCatViking/SmartChart.git"
+  },
+  "license": "MIT",
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/CrazyCatViking/SmartChart/blob/main/LICENSE"
+    }
+  ],
   "type": "module",
   "main": "./dist/index.umd.cjs",
   "module": "./dist/index.js",

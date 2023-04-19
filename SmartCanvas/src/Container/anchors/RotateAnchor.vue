@@ -16,35 +16,43 @@ import { inject, ref } from 'vue';
 import { GlobalEvents } from 'vue-global-events';
 import { rectInjectionToken } from '../useRect';
 import { chartInjectionKey } from '../../canvas/chart';
+import { createVector } from '../../utility/vector';
+import { useCanvasCoordinates } from '../../canvas/useCanvasCoordinates';
 
 const { rotateRect } = inject(rectInjectionToken)!;
 const { commitChanges } = inject(chartInjectionKey)!;
 
+const { getCanvasCoordinates } = useCanvasCoordinates();
+
 const isRotating = ref(false);
-const mousePosition = ref({ x: 0, y: 0 });
+const mousePosition = ref(createVector(0, 0));
 
 const onRotateStart = (e: MouseEvent) => {
   isRotating.value = true;
 
-  mousePosition.value = {
-    x: e.clientX,
-    y: e.clientY,
-  };
+  const { clientX, clientY } = e;
+
+  const mouseClientPos = createVector(clientX, clientY);
+  const mouseCanvasPos = getCanvasCoordinates(mouseClientPos);
+
+  mousePosition.value = mouseCanvasPos;
 };
 
 const onRotateEnd = (e: MouseEvent) => {
   isRotating.value = false;
 
-  mousePosition.value = {
-    x: 0,
-    y: 0,
-  };
+  mousePosition.value = createVector(0, 0);
 
   commitChanges();
 };
 
 const onRotate = (e: MouseEvent) => {
-  rotateRect(e.clientX, e.clientY);
+  const { clientX, clientY } = e;
+
+  const mouseClientPos = createVector(clientX, clientY);
+  const mouseCanvasPos = getCanvasCoordinates(mouseClientPos);
+
+  rotateRect(mouseCanvasPos);
 };
 </script>
 

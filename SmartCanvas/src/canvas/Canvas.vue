@@ -7,6 +7,7 @@
     class="canvas"
     @mousedown="onCanvasMouseDown"
     draggable="false"
+    ref="canvas"
   >
     <CanvasElement
       v-for="(element) in elements"
@@ -36,7 +37,7 @@
 </template>
 
 <script setup lang="ts">
-import { inject } from 'vue';
+import { inject, ref } from 'vue';
 import { GlobalEvents } from 'vue-global-events';
 import { v4 as uuidv4 } from 'uuid';
 import CanvasElement from '../canvas/CanvasElement.vue';
@@ -47,6 +48,7 @@ import DragSelect from '../DragSelect/DragSelect.vue';
 import { useDragSelect } from '../DragSelect/useDragSelect';
 import { createVector } from '../utility/vector';
 import { useCopyPaste } from './copyPaste';
+import { useCanvasCoordinates } from './useCanvasCoordinates';
 
 const {
   elements,
@@ -58,8 +60,11 @@ const {
 const { ctrlPressed } = inject(hotKeyStateInjectionKey)!;
 const { isAddingElement } = inject(canvasStateInjectionKey)!;
 
+const canvas = ref<HTMLElement>();
+
 const { isSelecting, beginSelection } = useDragSelect();
 const { copySelected, cutSelected, paste } = useCopyPaste();
+const { getCanvasCoordinates } = useCanvasCoordinates(canvas);
 
 const onDelete = (e: KeyboardEvent) => {
   if (e.key === 'Delete') {
@@ -70,7 +75,10 @@ const onDelete = (e: KeyboardEvent) => {
 
 const onCanvasMouseDown = (e: MouseEvent) => {
   const { clientX, clientY } = e;
-  beginSelection(createVector(clientX, clientY));
+  const mouseClientPos = createVector(clientX, clientY);
+  const mouseCanvasPos = getCanvasCoordinates(mouseClientPos);
+
+  beginSelection(mouseCanvasPos);
 };
 </script>
 

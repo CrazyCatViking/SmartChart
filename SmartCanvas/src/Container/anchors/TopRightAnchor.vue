@@ -17,9 +17,12 @@ import { GlobalEvents } from 'vue-global-events';
 import { rectInjectionToken } from '../useRect';
 import { Vector, createVector } from '../../utility/vector';
 import { chartInjectionKey } from '../../canvas/chart';
+import { useCanvasCoordinates } from '../../canvas/useCanvasCoordinates';
 
 const { resizeRect, rectVertices } = inject(rectInjectionToken)!;
 const { commitChanges } = inject(chartInjectionKey)!;
+
+const { getCanvasCoordinates } = useCanvasCoordinates();
 
 const isResizing = ref(false);
 const initialPosition = ref<Vector>()
@@ -38,9 +41,11 @@ const onResizeEnd = () => {
 
 const onResize = (e: MouseEvent) => {
   const { clientX, clientY } = e;
-  const mousePosition = createVector(clientX, clientY);
 
-  resizeRect(mousePosition, initialPosition.value!);
+  const mouseClientPos = createVector(clientX, clientY);
+  const mouseCanvasPos = getCanvasCoordinates(mouseClientPos);
+
+  resizeRect(mouseCanvasPos, initialPosition.value!);
 };
 </script>
 

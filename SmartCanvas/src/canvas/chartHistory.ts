@@ -1,5 +1,6 @@
 import { Element } from "../elements";
 import { deserializeChart, serializeChart } from "../utility/chartSerializer";
+import { CustomElementFactory } from "./customFactories";
 
 export interface ChartHistory {
   checkCanUndo: () => boolean;
@@ -10,7 +11,7 @@ export interface ChartHistory {
   redoChanges: () => Element[]; 
 }
 
-export const createChartHistory = (elements: Element[]): ChartHistory => {
+export const createChartHistory = (elements: Element[], customElementFactory?: CustomElementFactory): ChartHistory => {
   let _history: string[] = [ serializeChart(elements) ];
   let currentIndex: number = 0;
 
@@ -28,12 +29,12 @@ export const createChartHistory = (elements: Element[]): ChartHistory => {
 
   const undoChanges = (): Element[] => {
     currentIndex += 1;
-    return deserializeChart(_history[currentIndex]);
+    return deserializeChart(_history[currentIndex], { customFactory: customElementFactory });
   };
 
   const redoChanges = (): Element[] => {
     currentIndex -= 1;
-    return deserializeChart(_history[currentIndex]);
+    return deserializeChart(_history[currentIndex], { customFactory: customElementFactory });
   };
 
   return {

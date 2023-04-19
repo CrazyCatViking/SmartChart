@@ -12,7 +12,7 @@ import { Element } from "../elements/element";
 import { HotKeyState } from "./hotKeyState";
 import { CanvasState } from "./canvasState";
 import { ElementGroup, createGroup } from "../elements/elementGroup";
-import { createChartHistory } from "./chartHistory";
+import { ChartHistory, createChartHistory } from "./chartHistory";
 
 export interface Chart {
   elements: Readonly<Ref<Element[]>>;
@@ -33,8 +33,8 @@ export interface Chart {
   deleteSelected: () => void;
 }
 
-export const useChart = (canvasState: CanvasState, hotKeyState: HotKeyState): Chart => {
-  const chart = createChart(canvasState, hotKeyState);
+export const useChart = (canvasState: CanvasState, hotKeyState: HotKeyState, chartHistory: ChartHistory): Chart => {
+  const chart = createChart(canvasState, hotKeyState, chartHistory);
   provide(chartInjectionKey, chart);
 
   return chart;
@@ -42,7 +42,7 @@ export const useChart = (canvasState: CanvasState, hotKeyState: HotKeyState): Ch
 
 export const chartInjectionKey: InjectionKey<Chart> = Symbol('chart-injection-key');
 
-const createChart = (canvasState: CanvasState, hotKeyState: HotKeyState): Chart => {
+const createChart = (canvasState: CanvasState, hotKeyState: HotKeyState, chartHistory: ChartHistory): Chart => {
   const _elements: Ref<Element[]> = shallowRef([]);
   const _selectedElements: Ref<string[]> = ref([]);
 
@@ -53,7 +53,7 @@ const createChart = (canvasState: CanvasState, hotKeyState: HotKeyState): Chart 
 
     checkCanRedo,
     checkCanUndo,
-  } = createChartHistory(_elements.value);
+  } = chartHistory;
 
   const selectionGroupId = ref<string>();
 

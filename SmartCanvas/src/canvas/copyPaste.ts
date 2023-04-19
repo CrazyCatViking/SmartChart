@@ -1,6 +1,7 @@
 import { inject } from "vue";
-import { chartInjectionKey } from "./chart";
+import { Chart, chartInjectionKey } from "./chart";
 import { deserializeChart, serializeChart } from "../utility/chartSerializer";
+import { customElementFactoryInjectionKey } from "./customFactories";
 
 export interface CopyPaste {
   copySelected: () => Promise<void>;
@@ -11,14 +12,16 @@ export interface CopyPaste {
 
 type ClipBoardEntry = { type: 'smartchart/clipboard', data: string };
 
-export const useCopyPaste = (): CopyPaste => {
+export const useCopyPaste = (chart?: Chart): CopyPaste => {
   const {
     elements,
     selectedElements,
     deleteSelected,
     addElements,
     commitChanges,
-  } = inject(chartInjectionKey)!;
+  } = chart ?? inject(chartInjectionKey)!;
+
+  const customElementFactory = inject(customElementFactoryInjectionKey);
 
   const copySelected = () => {
     const elementIds = selectedElements.value;
@@ -47,7 +50,7 @@ export const useCopyPaste = (): CopyPaste => {
       
       if (deserializedData.type !== "smartchart/clipboard") return;
 
-      const elements = deserializeChart(deserializedData.data, { noPersistId: true });
+      const elements = deserializeChart(deserializedData.data, { noPersistId: true, customFactory: customElementFactory });
       addElements(...elements);
       commitChanges();
     } catch {

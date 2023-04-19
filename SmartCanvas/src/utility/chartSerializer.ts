@@ -13,8 +13,9 @@ import {
   createRect,
   createText
 } from "../elements";
+import { CustomElementFactory } from '../canvas/customFactories';
 
-type SerializerOptions = { noPersistId: boolean };
+type SerializerOptions = { noPersistId?: boolean, customFactory?: CustomElementFactory };
 
 export const serializeChart = (elements: Element[]): string => {
   // This is a hack to unwrap the nested refs
@@ -53,7 +54,7 @@ export const deserializeChart = (elements: string, options?: SerializerOptions):
       case 'Text':
         return createText(data as TextData);
       default:
-        return createElement(data);
+        return options?.customFactory ? options.customFactory(data) : createElement(data);
     }
   });
 

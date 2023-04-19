@@ -9,13 +9,13 @@ export type ElementType = 'Image' | 'Rectangle' | 'Ellipse' | 'Text' | 'Group' |
 export interface ElementData {
   position: ElementPosition;
   size: ElementSize;
-  type?: ElementType;
+  type?: string;
   id?: string;
 };
 
 export interface Element {
   id: Readonly<string>;
-  type?: Readonly<ElementType>;
+  type?: Readonly<string>;
   position: Ref<ElementPosition>;
   size: Ref<ElementSize>;
 

@@ -11,12 +11,8 @@
 <script setup lang="ts">
 import { PropType, computed } from 'vue';
 import Container from '../Container/Container.vue';
-import Ellipse from '../primitives/CanvasEllipse.vue';
-import Rectangle from '../primitives/CanvasRectangle.vue';
-import Image from '../primitives/CanvasImage.vue';
-import TextElement from '../primitives/CanvasText.vue';
-import Connector from '../primitives/CanvasConnector.vue';
 import { Element } from '../elements/element';
+import { usePrimitiveFactory } from './primitiveFactory';
 
 const props = defineProps({
   element: {
@@ -25,21 +21,11 @@ const props = defineProps({
   },
 });
 
+const { createPrimitive } = usePrimitiveFactory();
+
 const component = computed(() => {
-  switch(props.element.type) {
-    case 'Rectangle':
-      return Rectangle;
-    case 'Ellipse':
-      return Ellipse;
-    case 'Image':
-      return Image;
-    case 'Text':
-      return TextElement;
-    case 'Connector':
-      return Connector;
-    default:
-      return undefined;
-  }
+  if (!props.element.type) return undefined;
+  return createPrimitive(props.element.type);
 });
 </script>
 

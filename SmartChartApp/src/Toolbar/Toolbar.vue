@@ -29,6 +29,13 @@
     </button>
 
     <button
+      class="toolbar-button"
+      @click="onClickArrow"
+    >
+      <span>{{ '+ Arrows' }}</span>
+    </button>
+
+    <button
       v-show="showConnectButton"
       class="toolbar-button"
       @click="onClickConnectSelected"
@@ -50,6 +57,11 @@
     @mousemove="onMouseMove"
     @mouseup="onMouseUp"
   />
+
+  <GlobalEvents
+    v-if="showAnchorPoints"
+    @keydown.esc="onExitArrowMode"
+  />
 </template>
 
 <script setup lang="ts">
@@ -60,6 +72,7 @@ import { Element, createConnector, createEllipse, createImage, createRect, creat
 import { ElementPosition, ElementSize } from '@crazycatviking/smartcanvas';
 import { canvasStateInjectionKey } from '@crazycatviking/smartcanvas';
 import { Vector, createVector } from '@crazycatviking/smartcanvas';
+import { useCanvasArrows } from '@crazycatviking/smartcanvas';
 
 const imageUrl = "https://i.guim.co.uk/img/media/26392d05302e02f7bf4eb143bb84c8097d09144b/446_167_3683_2210/master/3683.jpg?width=620&quality=85&dpr=1&s=none";
 
@@ -71,6 +84,8 @@ const {
   selectedElements,
   elements,
 } = inject(chartInjectionKey)!;
+
+const { showAnchorPoints } = useCanvasArrows();
 
 const { startAddElement, endAddElement } = inject(canvasStateInjectionKey)!;
 
@@ -98,6 +113,14 @@ const onClickImage = () => {
   isCreatingImage.value = true
   startAddElement();
 };
+
+const onClickArrow = () => {
+  showAnchorPoints.value = !showAnchorPoints.value;
+}
+
+const onExitArrowMode = () => {
+  showAnchorPoints.value = false;
+}
 
 const onClickConnectSelected = () => {
   const elementIds = selectedElements.value;

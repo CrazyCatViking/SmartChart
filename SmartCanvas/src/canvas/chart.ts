@@ -6,7 +6,7 @@ import {
   ComputedRef,
   computed,
   watch,
-  shallowRef
+  shallowRef,
 } from "vue";
 import { Element } from "../elements/element";
 import { HotKeyState } from "./hotKeyState";
@@ -25,7 +25,7 @@ export interface Chart {
   undoChanges: () => void;
   redoChanges: () => void;
 
-  convertToImage: () => void;
+  convertToImage: () => Promise<Blob | null>;
 
   selectElements: (...ids: string[]) => void;
   resetSelection: () => void;
@@ -33,16 +33,26 @@ export interface Chart {
   deleteSelected: () => void;
 }
 
-export const useChart = (canvasState: CanvasState, hotKeyState: HotKeyState, chartHistory: ChartHistory): Chart => {
+export const useChart = (
+  canvasState: CanvasState,
+  hotKeyState: HotKeyState,
+  chartHistory: ChartHistory
+): Chart => {
   const chart = createChart(canvasState, hotKeyState, chartHistory);
   provide(chartInjectionKey, chart);
 
   return chart;
 };
 
-export const chartInjectionKey: InjectionKey<Chart> = Symbol('chart-injection-key');
+export const chartInjectionKey: InjectionKey<Chart> = Symbol(
+  "chart-injection-key"
+);
 
-const createChart = (canvasState: CanvasState, hotKeyState: HotKeyState, chartHistory: ChartHistory): Chart => {
+const createChart = (
+  canvasState: CanvasState,
+  hotKeyState: HotKeyState,
+  chartHistory: ChartHistory
+): Chart => {
   const _elements: Ref<Element[]> = shallowRef([]);
   const _selectedElements: Ref<string[]> = ref([]);
 
@@ -58,24 +68,26 @@ const createChart = (canvasState: CanvasState, hotKeyState: HotKeyState, chartHi
   const selectionGroupId = ref<string>();
 
   const addElements = (...elements: Element[]) => {
-    _elements.value = [ ..._elements.value, ...elements ];
-  }
+    _elements.value = [..._elements.value, ...elements];
+  };
 
   const removeElement = (id: string) => {
     _elements.value = _elements.value.filter((element) => element.id !== id);
   };
 
   const convertToImage = async (): Promise<Blob | null> => {
-    const canvas = document.createElement('canvas');
+    const canvas = document.createElement("canvas");
     canvas.width = document.documentElement.clientWidth;
     canvas.height = document.documentElement.clientHeight;
 
-    const ctx = canvas.getContext('2d')!;
+    const ctx = canvas.getContext("2d")!;
 
     ctx.fillStyle = "white";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    const elementsToRender = _elements.value.filter((element) => element.type !== 'Group');
+    const elementsToRender = _elements.value.filter(
+      (element) => element.type !== "Group"
+    );
 
     for (const element of elementsToRender) {
       await element.render(ctx);
@@ -87,36 +99,41 @@ const createChart = (canvasState: CanvasState, hotKeyState: HotKeyState, chartHi
   };
 
   const selectElements = (...ids: string[]) => {
-    if (ids.some(id => id === selectionGroupId.value)) return;
+    if (ids.some((id) => id === selectionGroupId.value)) return;
 
     if (hotKeyState.ctrlPressed.value) {
       _selectedElements.value.push(...ids);
       return;
     }
 
-    _selectedElements.value = [ ...ids ];
+    _selectedElements.value = [...ids];
   };
 
   const resetSelection = () => {
     _selectedElements.value = [];
   };
 
-  const getIsSelected = (id: string) => computed(() => {
-    if (_selectedElements.value.length === 1) {
-      return _selectedElements.value.includes(id);
-    }
+  const getIsSelected = (id: string) =>
+    computed(() => {
+      if (_selectedElements.value.length === 1) {
+        return _selectedElements.value.includes(id);
+      }
 
-    const element = _elements.value.find((element) => element.id === id);
-    
-    if (element?.type !== 'Group') return false;
+      const element = _elements.value.find((element) => element.id === id);
 
-    const group = element as ElementGroup;
+      if (element?.type !== "Group") return false;
 
-    return group.children.every((child) => _selectedElements.value.includes(child.id));
-  });
+      const group = element as ElementGroup;
+
+      return group.children.every((child) =>
+        _selectedElements.value.includes(child.id)
+      );
+    });
 
   const deleteSelected = () => {
-    _elements.value = _elements.value.filter((element) => !_selectedElements.value.includes(element.id));
+    _elements.value = _elements.value.filter(
+      (element) => !_selectedElements.value.includes(element.id)
+    );
     _selectedElements.value = [];
   };
 
@@ -134,26 +151,35 @@ const createChart = (canvasState: CanvasState, hotKeyState: HotKeyState, chartHi
     _elements.value = redoChanges();
   };
 
-  watch(_selectedElements, (value) => {
-    if (selectionGroupId.value) {
-      removeElement(selectionGroupId.value);
-      selectionGroupId.value = undefined;
-    }
+  watch(
+    _selectedElements,
+    (value) => {
+      if (selectionGroupId.value) {
+        removeElement(selectionGroupId.value);
+        selectionGroupId.value = undefined;
+      }
 
-    if (value.length <= 1) return;
+      if (value.length <= 1) return;
 
-    const elements = _elements.value
-      .filter((element) => value.includes(element.id) && element.type !== 'Connector');
+      const elements = _elements.value.filter(
+        (element) => value.includes(element.id) && element.type !== "Connector"
+      );
 
-    const groupElement = createGroup(elements);
+      const groupElement = createGroup(elements);
 
-    selectionGroupId.value = groupElement.id;
-    addElements(groupElement);
-  }, { deep: true });
+      selectionGroupId.value = groupElement.id;
+      addElements(groupElement);
+    },
+    { deep: true }
+  );
 
   return {
-    get elements() { return _elements; },
-    get selectedElements() { return _selectedElements; },
+    get elements() {
+      return _elements;
+    },
+    get selectedElements() {
+      return _selectedElements;
+    },
 
     addElements,
     removeElement,
@@ -168,5 +194,5 @@ const createChart = (canvasState: CanvasState, hotKeyState: HotKeyState, chartHi
     resetSelection,
     getIsSelected,
     deleteSelected,
-  }
-}
+  };
+};

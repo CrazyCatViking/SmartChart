@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { Vector, createVector } from "../utility/vector";
 import { Vertices, createVertices } from "../utility/vertices";
 
-export type ElementType = 'Image' | 'Rectangle' | 'Ellipse' | 'Text' | 'Group' | 'Connector';
+export type ElementType = 'Image' | 'Rectangle' | 'Ellipse' | 'Text' | 'Group' | 'Connector' | 'Arrow';
 
 export interface ElementData {
   position: ElementPosition;

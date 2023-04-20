@@ -4,6 +4,7 @@ import Rectangle from "../primitives/CanvasRectangle.vue";
 import Image from "../primitives/CanvasImage.vue";
 import TextElement from "../primitives/CanvasText.vue";
 import Connector from "../primitives/CanvasConnector.vue";
+import Arrow from "../primitives/CanvasArrow.vue";
 import { customPrimitiveFactoryInjectionKey } from "./customFactories";
 
 export const usePrimitiveFactory = () => {
@@ -21,6 +22,8 @@ export const usePrimitiveFactory = () => {
         return TextElement;
       case "Connector":
         return Connector;
+      case "Arrow":
+        return Arrow;
       default:
         return !!customFactory ? customFactory(type) : undefined;
     }

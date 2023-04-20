@@ -21,6 +21,7 @@ export const rectInjectionToken: InjectionKey<Rect> = Symbol(
 );
 
 interface Rect {
+  element: Element;
   rectPosition: Ref<ElementPosition>;
   rectSize: Ref<ElementSize>;
   rectVertices: ComputedRef<RectVertices>;
@@ -103,6 +104,7 @@ const createRect = (element: Element): Rect => {
   };
 
   return {
+    element,
     rectPosition,
     rectSize,
     rectVertices,

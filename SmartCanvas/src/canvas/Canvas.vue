@@ -11,7 +11,7 @@
   >
     <CanvasElement
       v-for="(element) in elements"
-      :key="uuidv4()"
+      :key="element.id"
       :element="element"
     />
   </div>

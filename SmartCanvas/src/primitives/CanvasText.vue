@@ -1,4 +1,11 @@
 <template>
+  <ContainerTransform
+    v-show="isSelected"
+    draggable="false"
+  />
+
+  <ArrowAnchors />
+
   <pre
     class="text"
     :style="textStyle"
@@ -16,13 +23,6 @@
     @keydown.ctrl.v.exact.stop
     @keydown.ctrl.x.exact.stop
   />
-
-  <ContainerTransform
-    v-show="isSelected"
-    draggable="false"
-  />
-
-  <ArrowAnchors />
 
   <GlobalEvents
     v-if="isEditing"
@@ -94,6 +94,7 @@ const onClick = (e: MouseEvent) => {
 
 <style lang="scss">
 .text {
+  pointer-events: all;
   position: absolute;
   top: 0;
   left: 0;
@@ -110,6 +111,7 @@ const onClick = (e: MouseEvent) => {
 }
 
 .text-area {
+  pointer-events: all;
   position: absolute;
   top: 0;
   left: 0;

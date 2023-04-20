@@ -1,89 +1,27 @@
 <template>
   <div class="container-arrow-anchor__top"
-  @click.stop.prevent
-    @mousedown="onMouseDown"
-    @mouseup="onMouseUp"
+    @click.stop.prevent
+    @mousedown.stop="onMouseDown"
+    @mouseup.stop="onMouseUp"
   />
 
   <GlobalEvents
     v-if="isOrigin"
     @mousemove="onMouseMove"
-    @mouseup="onMouseUp"
+    @mouseup.stop="onMouseUp"
   />
 </template>
 
 <script setup lang="ts">
-import { inject, ref } from 'vue';
 import { GlobalEvents } from 'vue-global-events';
-import { rectInjectionToken } from '../../useRect';
-import { createVector } from '../../../utility/vector';
-import { useCanvasCoordinates } from '../../../canvas/useCanvasCoordinates';
-import { useCanvasArrows } from '../../../canvas/useCanvasArrows';
-import { Anchor } from '../../../elements';
+import { useDrawArrow } from './useDrawArrow';
 
 const {
-  startDrawingArrow,
-  setTargetAnchor,
-  endDrawingArrow,
-} = useCanvasArrows();
-
-const { getCanvasCoordinates } = useCanvasCoordinates();
-
-const { element } = inject(rectInjectionToken)!;
-
-const isOrigin = ref(false);
-
-const onMouseDown = (e: MouseEvent) => {
-  const { clientX, clientY } = e;
-
-  const mousePos = createVector(clientX, clientY);
-  const mouseCanvasPos = getCanvasCoordinates(mousePos);
-
-  isOrigin.value = true;
-
-  const targetAnchor: Anchor = {
-    anchorCoordinates: mouseCanvasPos,
-  };
-
-  const originAnchor: Anchor = {
-    element,
-    anchorPoint: 'Top',
-    anchorCoordinates: createVector(0, 0),
-  };
-
-  startDrawingArrow(originAnchor, targetAnchor);
-};
-
-const onMouseMove = (e: MouseEvent) => {
-  const targetAnchor = getTargetFromMouse(e);
-  setTargetAnchor(targetAnchor);
-}
-
-const onMouseUp = (e: MouseEvent) => {
-  const targetAnchor: Anchor = !isOrigin.value ? {
-    element,
-    anchorPoint: 'Top',
-    anchorCoordinates: createVector(0, 0),
-  } : getTargetFromMouse(e)
-
-  setTargetAnchor(targetAnchor);
-  endDrawingArrow();
-
-  isOrigin.value = false;
-}
-
-const getTargetFromMouse = (e: MouseEvent) => {
-  const { clientX, clientY } = e;
-
-  const mousePos = createVector(clientX, clientY);
-  const mouseCanvasPos = getCanvasCoordinates(mousePos);
-
-  const targetAnchor: Anchor = {
-    anchorCoordinates: mouseCanvasPos,
-  };
-
-  return targetAnchor;
-}
+  onMouseDown,
+  onMouseMove,
+  onMouseUp,
+  isOrigin,
+} = useDrawArrow('Top');
 </script>
 
 <style lang="scss">
@@ -94,7 +32,7 @@ const getTargetFromMouse = (e: MouseEvent) => {
   border-radius: 50%;
   outline: 2px solid black;
 
-  top: -10px;
+  top: -20px;
   left: 50%;
   transform: translate(-50%);
 

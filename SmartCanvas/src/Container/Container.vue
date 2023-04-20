@@ -7,11 +7,6 @@
     @mousedown.stop="onSelectElement"
     @click.stop.prevent
   >
-    <ContainerTransform
-      v-show="isSelected"
-      draggable="false"
-    />
-
     <div
       class="container-content"
       draggable="false"
@@ -32,7 +27,6 @@
 import { PropType, computed, inject, ref } from 'vue';
 import { GlobalEvents } from 'vue-global-events';
 import { useRect } from './useRect';
-import ContainerTransform from './ContainerTransform.vue';
 import { chartInjectionKey } from '../canvas/chart';
 import { Element } from '../elements';
 
@@ -43,8 +37,7 @@ const props = defineProps({
   },
 });
 
-const { selectElements: selectElement, getIsSelected, commitChanges } = inject(chartInjectionKey)!;
-const isSelected = getIsSelected(props.element.id);
+const { selectElements: selectElement, commitChanges } = inject(chartInjectionKey)!;
 
 const isDragging = ref(false);
 
@@ -103,6 +96,7 @@ const style = computed(() => {
 
 <style lang="scss">
 .container {
+  pointer-events: none;
   position: absolute;
   top: 0;
   left: 0;
@@ -111,6 +105,7 @@ const style = computed(() => {
 }
 
 .container-content {
+  pointer-events: none;
   position: absolute;
   top: 0;
   left: 0;

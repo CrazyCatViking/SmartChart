@@ -14,6 +14,6 @@
     "skipLibCheck": true,
     "declaration": true,
   },
-  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue", "shims-vue.d.ts"],
+  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue", "shims-vue.d.ts", "vue-global-events.d.ts"],
   "exclude": ["./node_modules"],
 }

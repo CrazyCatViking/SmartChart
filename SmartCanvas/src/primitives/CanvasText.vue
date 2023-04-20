@@ -17,6 +17,13 @@
     @keydown.ctrl.x.exact.stop
   />
 
+  <ContainerTransform
+    v-show="isSelected"
+    draggable="false"
+  />
+
+  <ArrowAnchors />
+
   <GlobalEvents
     v-if="isEditing"
     @mousedown="onClick"
@@ -24,9 +31,12 @@
 </template>
 
 <script setup lang="ts">
-import { PropType, StyleValue, computed, ref } from 'vue';
+import { PropType, StyleValue, computed, inject, ref } from 'vue';
 import { GlobalEvents } from 'vue-global-events';
 import { TextElement } from '../elements';
+import ContainerTransform from '../Container/ContainerTransform.vue';
+import { chartInjectionKey } from '../canvas/chart';
+import ArrowAnchors from '../Container/arrowAnchors/ArrowAnchors.vue';
 
 const props = defineProps({
   element: {
@@ -34,6 +44,9 @@ const props = defineProps({
     required: true,
   },
 });
+
+const { getIsSelected } = inject(chartInjectionKey)!;
+const isSelected = getIsSelected(props.element.id);
 
 const textAreaRef = ref();
 

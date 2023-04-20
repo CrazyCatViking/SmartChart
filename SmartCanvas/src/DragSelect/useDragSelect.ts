@@ -48,6 +48,8 @@ const createDragSelectState = (): DragSelectState => {
 
     const elementsToSelect = elements.value
       .filter((element) => {
+        if (element.type === 'Arrow') return false; 
+
         const { x, y } = unref(element.position);
         const { width: elWidth, height: elHeight } = unref(element.size);
 

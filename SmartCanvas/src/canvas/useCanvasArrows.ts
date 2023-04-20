@@ -1,12 +1,15 @@
-import { InjectionKey } from "vue";
+import { InjectionKey, Ref, ref } from "vue";
 import { injectOrProvide } from "../utility/injectOrProvide";
 import { Chart } from "./chart";
 import { Anchor, ArrowElement, createArrow } from "../elements";
 
 export interface CanvasArrows {
+  showAnchorPoints: Ref<boolean>;
+
   startDrawingArrow: (originAnchor: Anchor, targetAnchor: Anchor) => void;
   setTargetAnchor: (targetAnchor: Anchor) => void;
   endDrawingArrow: () => void;
+  cancelDrawingArrow: () => void;
 }
 
 const canvasArrowsInjectionKey: InjectionKey<CanvasArrows> =
@@ -22,12 +25,11 @@ export const useCanvasArrows = (chart?: Chart) => {
 };
 
 export const createCavnasArrows = (chart: Chart): CanvasArrows => {
-  let _isDrawingArrow = false;
+  const showAnchorPoints = ref(false);
+
   let _arrow: ArrowElement | undefined = undefined;
 
   const startDrawingArrow = (originAnchor: Anchor, targetAnchor: Anchor) => {
-    _isDrawingArrow = true;
-
     const arrow = createArrow({
       originAnchor,
       targetAnchor,
@@ -41,19 +43,26 @@ export const createCavnasArrows = (chart: Chart): CanvasArrows => {
 
   const setTargetAnchor = (targetAnchor: Anchor) => {
     if (!_arrow) return;
-    _arrow.tragetAnchor.value = targetAnchor;
+    _arrow.targetAnchor.value = targetAnchor;
   };
 
   const endDrawingArrow = () => {
-    _isDrawingArrow = false;
     _arrow = undefined;
-
     chart.commitChanges();
   };
 
+  const cancelDrawingArrow = () => {
+    if (!_arrow) return;
+    chart.removeElement(_arrow.id);
+    _arrow = undefined;
+  }
+
   return {
+    showAnchorPoints,
+
     startDrawingArrow,
     setTargetAnchor,
     endDrawingArrow,
+    cancelDrawingArrow,
   };
 };

@@ -11,7 +11,7 @@ export type AnchorPoint = "Left" | "Top" | "Bottom" | "Right";
 
 export interface ArrowElement extends Element {
   originAnchor: Ref<Anchor | undefined>;
-  tragetAnchor: Ref<Anchor | undefined>;
+  targetAnchor: Ref<Anchor | undefined>;
   lines: Ref<Array<{ origin: Vector; target: Vector }>>;
   strokeWidth: number;
 }
@@ -82,7 +82,7 @@ export const createArrow = (data: ArrowData): ArrowElement => {
     ...element,
 
     originAnchor: _originAnchor,
-    tragetAnchor: _targetAnchor,
+    targetAnchor: _targetAnchor,
     lines,
 
     position: _position,

@@ -1,11 +1,14 @@
 import { ref, unref } from 'vue'; 
 import { v4 as uuidV4 } from 'uuid';
 import {
+  Anchor,
+  ArrowData,
   ConnectorData,
   Element,
   ElementData,
   ImageData,
   TextData,
+  createArrow,
   createConnector,
   createElement,
   createEllipse,
@@ -26,7 +29,7 @@ export const serializeChart = (elements: Element[]): string => {
 export const deserializeChart = (elements: string, options?: SerializerOptions): Element[] => {
   const elementData = JSON.parse(elements) as Array<ElementData>;
 
-  const compositElementTypes = ['Group', 'Connector'];
+  const compositElementTypes = ['Group', 'Connector', 'Arrow'];
 
   const regularElementData = elementData.filter((data) => !compositElementTypes.includes(data.type ?? ''));
   const compositElementData = elementData.filter((data) => compositElementTypes.includes(data.type ?? ''));
@@ -69,6 +72,26 @@ export const deserializeChart = (elements: string, options?: SerializerOptions):
         if (!originElement || !targetElement) throw new Error();
 
         return createConnector({ ...connectorData, originElement, targetElement });
+      case 'Arrow':
+        const arrowData = data as ArrowData;
+
+        const originAnchor: Anchor = {
+          anchorCoordinates: arrowData.originAnchor.anchorCoordinates,
+          anchorPoint: arrowData.originAnchor.anchorPoint,
+          element: arrowData.originAnchor.element
+            ? regularElements.find((element) => element.id === idMapping[arrowData.originAnchor.element!.id])
+            : undefined,
+        };
+
+        const targetAnchor: Anchor = {
+          anchorCoordinates: arrowData.targetAnchor.anchorCoordinates,
+          anchorPoint: arrowData.targetAnchor.anchorPoint,
+          element: arrowData.targetAnchor.element
+            ? regularElements.find((element) => element.id === idMapping[arrowData.targetAnchor.element!.id])
+            : undefined,
+        };
+
+        return createArrow({ ...arrowData, originAnchor, targetAnchor });
       default:
         return createElement(data);
     }

@@ -9,8 +9,6 @@
     <BottomLeftAnchor />
 
     <BottomRightAnchor />
-
-    <ArrowAnchors />
   </div>
 </template>
 
@@ -20,11 +18,11 @@ import TopRightAnchor from './anchors/TopRightAnchor.vue';
 import BottomLeftAnchor from './anchors/BottomLeftAnchor.vue';
 import BottomRightAnchor from './anchors/BottomRightAnchor.vue';
 import RotateAnchor from './anchors/RotateAnchor.vue';
-import ArrowAnchors from './arrowAnchors/ArrowAnchors.vue';
 </script>
 
 <style lang="scss">
 .container-transform {
+  pointer-events: all;
   position: absolute;
   top: 0;
   left: 0;

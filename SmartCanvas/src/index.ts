@@ -9,6 +9,7 @@ export * from './canvas/types';
 export * from './canvas/canvasState';
 export * from './utility/vector';
 export * from './canvas/useCanvasArrows';
+export * from './canvas/useCanvasCoordinates';
 
 export {
   Canvas,

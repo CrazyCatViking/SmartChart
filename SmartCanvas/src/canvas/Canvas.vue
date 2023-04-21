@@ -37,9 +37,8 @@
 </template>
 
 <script setup lang="ts">
-import { inject, ref } from 'vue';
+import { inject, ref, onMounted } from 'vue';
 import { GlobalEvents } from 'vue-global-events';
-import { v4 as uuidv4 } from 'uuid';
 import CanvasElement from '../canvas/CanvasElement.vue';
 import { chartInjectionKey } from './chart';
 import { hotKeyStateInjectionKey } from './hotKeyState';
@@ -64,7 +63,9 @@ const canvas = ref<HTMLElement>();
 
 const { isSelecting, beginSelection } = useDragSelect();
 const { copySelected, cutSelected, paste } = useCopyPaste();
-const { getCanvasCoordinates } = useCanvasCoordinates(canvas);
+const { getCanvasCoordinates, setCanvasRef } = useCanvasCoordinates();
+
+onMounted(() => setCanvasRef(canvas));
 
 const onDelete = (e: KeyboardEvent) => {
   if (e.key === 'Delete') {

@@ -8,6 +8,7 @@ import {
 } from "./customFactories";
 import { useHotKeyState } from "./hotKeyState";
 import { useCanvasArrows } from "./useCanvasArrows";
+import { useCanvasCoordinates } from "./useCanvasCoordinates";
 
 export interface CanvasOptions {
   customPrimitiveFactory?: CustomPrimitiveFactory;
@@ -28,6 +29,8 @@ export const useCanvas = (options?: CanvasOptions) => {
 
   const chartHistory = createChartHistory([], options?.customElementFactory);
 
+  const canvasCoordinates = useCanvasCoordinates();
+
   const chart = useChart(canvasState, hotKeyState, chartHistory);
 
   const canvasArrows = useCanvasArrows(chart);
@@ -35,6 +38,7 @@ export const useCanvas = (options?: CanvasOptions) => {
   return {
     canvasState,
     hotKeyState,
+    canvasCoordinates,
     canvasArrows,
     chart,
   };

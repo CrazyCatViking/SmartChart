@@ -78,6 +78,17 @@ export const createArrow = (data: ArrowData): ArrowElement => {
     ];
   });
 
+  const render = (ctx: CanvasRenderingContext2D) => {
+    const origin = originCoordinate.value;
+    const target = targetCoordinate.value;
+
+    ctx.beginPath();
+    ctx.moveTo(origin.x, origin.y);
+    ctx.lineTo(target.x, target.y);
+    ctx.lineWidth = _strokeWidth;
+    ctx.stroke();
+  };
+
   return {
     ...element,
 
@@ -88,6 +99,8 @@ export const createArrow = (data: ArrowData): ArrowElement => {
     position: _position,
     size: _size,
     strokeWidth: _strokeWidth,
+
+    render,
   };
 };
 
